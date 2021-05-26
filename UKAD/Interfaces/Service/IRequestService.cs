@@ -8,7 +8,7 @@ namespace UKAD.Interfaces.Service
 {
     public interface IRequestService
     {
-        public Task<HttpResponseMessage> SendRequestAsync(string page);
-        public Task<IEnumerable<Link>> ConvertLinks(HttpResponseMessage responseMessage, Link link);
+         Task<HttpResponseMessage> SendRequestAsync(string page);
+         Task<IEnumerable<Link>> ToLinkList(HttpResponseMessage responseMessage, Link link);
     }
 }

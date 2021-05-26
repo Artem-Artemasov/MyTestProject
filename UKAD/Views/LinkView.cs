@@ -1,37 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UKAD.Interfaces;
+using UKAD.Interfaces.View;
 using UKAD.Models;
+using UKAD.Repository;
 
-namespace UKAD
+namespace UKAD.Views
 {
-    class LinkView : ILinkView
+    public class LinkView : ILinkView
     {
-        /// <summary>
-        /// Display main operation and it code
-        /// </summary>
+        private IResultWritter resultWritter { get; set; }
 
-        public virtual bool Processing()
+        public LinkView(IResultWritter writter)
         {
-            Console.WriteLine("Program is working, please don't close it.");
+            resultWritter = writter;
+        }
+        public bool Processing()
+        {
+            resultWritter.WriteLine("Program is working, please don't close it.");
             return true;
         }
+
         /// <summary>
         /// Caclulate links and print it to console
         /// </summary>
-        public bool PrintCounts(ILinkRepository linkRepository)
+        public bool PrintCounts(LinkRepository linkRepository)
         {
             int allCount = linkRepository.GetAllLinksAsync().Result.Count();
             int sitemapCount = allCount - linkRepository.GetViewLinksAsync().Result.Count();
             int viewCount = allCount - linkRepository.GetSiteMapLinksAsync().Result.Count();
-            Console.WriteLine($"All founded urls - {allCount} \n");
-            Console.WriteLine($"Urls found in sitemap: {sitemapCount} \n");
-            Console.WriteLine($"Urls(html documents) found after crawling a website: {viewCount} \n");
+
+            resultWritter.WriteLine($"All founded urls - {allCount} \n");
+            resultWritter.WriteLine($"Urls found in sitemap: {sitemapCount} \n");
+            resultWritter.WriteLine($"Urls(html documents) found after crawling a website: {viewCount} \n");
+
             return true;
         }
+
         /// <summary>
         /// Print input list to console
         /// </summary>
@@ -41,14 +47,15 @@ namespace UKAD
             int i = 1;
             foreach (var link in links)
             {
-                Console.WriteLine("\n");
-                Console.WriteLine($" {i}) " + link.Url);
+                resultWritter.WriteLine("\n");
+                resultWritter.WriteLine($" {i}) " + link.Url);
                 WriteRaw('_');
                 i++;
             }
 
             return true;
         }
+
         /// <summary>
         /// Print to console all object from list with url and time
         /// </summary>
@@ -56,44 +63,59 @@ namespace UKAD
         {
             int i = 1;
             WriteRaw('_');
-            Console.Write("|  Url");
-            Console.CursorLeft = Console.BufferWidth - 16;
-            Console.WriteLine(" | Timing (ms)");
+            resultWritter.Write("|  Url");
+
+            resultWritter.ChangeCursorPositonX(resultWritter.GetOutputWidth() - 16);
+
+            resultWritter.WriteLine(" | Timing (ms)");
             WriteRaw('_');
             foreach (var link in links)
             {
-                if (link.Url.Length > Console.BufferWidth - 25)
+                if (link.Url.Length > resultWritter.GetOutputWidth() - 25)
                 {
-                    link.Url = InsertNewLine(link.Url);
+                    link.Url = InsertNewLine(link.Url, (resultWritter.GetOutputWidth() - 25));
                 }
 
-                Console.WriteLine("\n");
-                Console.Write("|  ");
-                Console.Write($"{i}) " + link.Url);
-                Console.CursorLeft = Console.BufferWidth-15;
-                Console.WriteLine(" | " + link.TimeDuration + "ms  |" );
+                resultWritter.WriteLine("\n|  ");
+                resultWritter.Write($"{i}) " + link.Url);
+
+                resultWritter.ChangeCursorPositonX(resultWritter.GetOutputWidth() - 15);
+
+                resultWritter.WriteLine(" | " + link.TimeDuration + "ms  |" );
                 i++;
                 WriteRaw('_');
             }
 
             return true;
         }
-        public string InsertNewLine(string input)
+
+        /// <summary>
+        /// Split input string on the many, insert a \n beetwen and return as one string 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public string InsertNewLine(string input,int maxWidth)
         {
-            int insertSymbols = input.Length / (Console.BufferWidth - 25);
+            int insertSymbols = input.Length / maxWidth;
             
             for (int i = 1; i <= insertSymbols; i++)
             {
-                input = input.Insert((Console.BufferWidth - 25) * i,"\n   ");
+                input = input.Insert(maxWidth * i,"\n   ");
             }
 
             return input;
         }
+
+        /// <summary>
+        /// Print line with input symbol. Width = console.BufferWidth at the call moment
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <returns></returns>
         public bool WriteRaw(char symbol)
         {
-            for(int i = 0; i < Console.BufferWidth; i++)
+            for(int i = 0; i < resultWritter.GetOutputWidth(); i++)
             {
-                Console.Write(symbol);
+                resultWritter.Write(symbol.ToString());
             }
             return true;
         }

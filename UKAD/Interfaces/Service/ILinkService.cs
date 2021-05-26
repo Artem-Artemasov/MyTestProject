@@ -11,10 +11,9 @@ namespace UKAD.Interfaces
 {
     public interface ILinkService
     {
-        public ILinkRepository LinkRepository { get; set; }
-        public void SetBaseUrl(string baseUrl);
-        public Task<bool> FindLinksInViewAsync(Link page);
-        public Task<bool> FindLinksInSitemapAsync();
-        public Task FindAllLinksAsync();
+         void SetUpBaseUrl(string baseUrl);
+         Task<bool> AddLinksFromViewAsync(Link page);
+         Task<bool> AddLinksFromSitemapAsync();
+         Task AnalyzeSiteForUrlAsync();
     }
 }

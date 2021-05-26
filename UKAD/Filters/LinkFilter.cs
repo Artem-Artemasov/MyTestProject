@@ -13,7 +13,7 @@ namespace UKAD.Filters
         /// <summary>
         /// Return true if string do not have a files extension
         /// </summary>
-        public bool IsFileLink(string link)
+        public virtual bool IsFileLink(string link)
         {
             string[] expansions = new string[]
             {
@@ -40,10 +40,7 @@ namespace UKAD.Filters
             return false;
         }
 
-        /// <summary>
-        /// Return true if link is in domain
-        /// </summary>
-        public bool IsCorrectLink(string link)
+        public virtual bool IsCorrectLink(string link)
         {
             var regex = new Regex(@"(?<1>(ht)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*))");
 
@@ -53,7 +50,13 @@ namespace UKAD.Filters
 
             return false;
         }
-        public string WWWConvert(string link)
+
+        /// <summary>
+        /// Add www. when link not contains it
+        /// </summary>
+        /// <param name="link"></param>
+        /// <returns></returns>
+        public virtual string AddWWW(string link)
         {
             if (link.Contains("www.") == false)
             {
@@ -63,7 +66,8 @@ namespace UKAD.Filters
 
             return link;
         }
-        public bool IsInDomain(string link,string domain)
+
+        public virtual bool IsInDomain(string link,string domain)
         {
             string domainWhOutWWW = "";
             if (domain.Contains("www."))

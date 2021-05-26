@@ -4,6 +4,7 @@ using UKAD.Controllers;
 using UKAD.Filters;
 using UKAD.Repository;
 using UKAD.Services;
+using UKAD.Views;
 
 namespace UKAD
 {
@@ -15,14 +16,11 @@ namespace UKAD
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
             LinkRepository linkRepository = new LinkRepository();
-
             LinkFilter linkFilter = new LinkFilter();
-
             LinkService linkService = new LinkService(linkRepository);
-
-            LinkView linkView = new LinkView();
-
-            LinkController linkController = new LinkController(linkService,linkView);
+            ResultWritter resultWritter = new ResultWritter();
+            LinkView linkView = new LinkView(resultWritter);
+            LinkController linkController = new LinkController(linkService,linkRepository,linkView);
 
             linkController.StartWork();
 

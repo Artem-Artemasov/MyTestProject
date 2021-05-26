@@ -1,130 +1,138 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using UKAD.Enums;
 using UKAD.Filters;
 using UKAD.Interfaces;
 using UKAD.Models;
+using UKAD.Repository;
 
 namespace UKAD.Services
 {
     public class LinkService:ILinkService
     {
+        private const int MaxTaskConst = 1;
         public string BaseUrl { get; private set; }
-        public ILinkRepository LinkRepository { get; set; }
+        public LinkRepository LinkRepository { get; set; }
         public LinkFilter LinkFilter { get; private set; }
         public RequestService RequestService { get; private set; }
         private string Host { get; set; }
         private string UrlWithHost { get; set; }
-        private int MaxTask { get; set; }
-        public LinkService(ILinkRepository linkRepository)
-        {
-            this.LinkRepository = linkRepository;
-            this.LinkFilter = new LinkFilter();
-            MaxTask = 10;
 
-        }
-        public void SetBaseUrl(string baseUrl)
+        public LinkService(LinkRepository linkRepository)
         {
-            this.RequestService = new RequestService(baseUrl);
-            this.BaseUrl = baseUrl;
-            this.Host = baseUrl.Substring(0, baseUrl.IndexOf("//") + 2);
-            this.UrlWithHost = baseUrl[(baseUrl.IndexOf("//") + 2)..];
+            LinkRepository = linkRepository;
+            LinkFilter = new LinkFilter();
+        }
+        public void SetUpBaseUrl(string baseUrl)
+        {
+            RequestService = new RequestService(baseUrl);
+            BaseUrl = baseUrl;
+            Host = baseUrl.Substring(0, baseUrl.IndexOf("//") + 2);
+            UrlWithHost = baseUrl[(baseUrl.IndexOf("//") + 2)..];
         }
 
         /// <summary>
         /// If baseUrl is not setup, this method do nothing 
-        /// Find links in sitemap and html code, add links in repo.
+        /// Find links in sitemap and html code, add links in repository.
+        /// It needed more time for work
         /// </summary>
-        public async Task FindAllLinksAsync()
+        public async Task AnalyzeSiteForUrlAsync()
         {
-            if (this.BaseUrl.Length == 0) return;
+            if (BaseUrl.Length == 0) return;
 
-            Task[] factory = new Task[MaxTask];
+            Task[] factory = new Task[MaxTaskConst];
 
-            for (int i = 0; i <MaxTask; i++)
+            for (int i = 0; i < MaxTaskConst; i++)
             {
-                /*Thread.Sleep(50);*/
-                factory[i] = Task.Factory.StartNew(() => 
-                this.FindLinksInViewAsync(new Link(this.BaseUrl, Enums.LocationUrl.InView))).Result;
+                Thread.Sleep(50);
+                factory[i] = Task.Factory.StartNew(() =>
+                AddLinksFromViewAsync(new Link(BaseUrl, Enums.LocationUrl.InView))).Result;
             }
 
             Task.WaitAll(factory);
 
-            await this.FindLinksInSitemapAsync();
+            await AddLinksFromSitemapAsync();
         }
 
         /// <summary>
         /// Find all links in html code started with page
         /// </summary>
-        public async Task<bool> FindLinksInViewAsync(Link page)
+        public async Task<bool> AddLinksFromViewAsync(Link currentPage)
         {
-            if (this.BaseUrl.Length == 0) return false;
-            if (LinkRepository.Exist(page)) return true;
-            if (LinkRepository.IsProcessing(page.Url) && page.Url != BaseUrl) return true;
+            if (BaseUrl.Length == 0) 
+                    return false;
 
-            page.WorkState = WorkState.Processing;
-            var responseMessage = await TimeRequest(page);
-           /* Console.WriteLine(page.Url);*/
+            if (LinkRepository.Exist(currentPage)) 
+                    return true;
+
+            if (LinkRepository.IsProcessing(currentPage) && currentPage.Url != BaseUrl) 
+                    return true;
+
+            currentPage.WorkState = WorkState.Processing;
+
+            var responseMessage = await GetResponseMessage(currentPage);
             lock (LinkRepository)
             {
-                LinkRepository.AddAsync(page).Wait();
+                LinkRepository.AddAsync(currentPage).Wait();
             }
-            var pageUrlList = (await RequestService.ConvertLinks(responseMessage, page)).ToList();
-            pageUrlList.RemoveAll(p =>!LinkFilter.IsInDomain(p.Url, this.BaseUrl) || LinkFilter.IsFileLink(p.Url));
+
+            var pageUrlList = (await RequestService.ToLinkList(responseMessage, currentPage)).ToList();
+
+            pageUrlList.RemoveAll(p => LinkFilter.IsInDomain(p.Url, this.BaseUrl) == false);
+            pageUrlList.RemoveAll(p => LinkFilter.IsFileLink(p.Url));
 
             foreach (var link in pageUrlList)
             {
-                AddState result;
-
-                lock (this.LinkRepository)  
+                AddState addState;
+                lock (LinkRepository)  
                 {
-                    result = this.LinkRepository.AddAsync(link).Result;
+                    addState = LinkRepository.AddAsync(link).Result;
                 }
-
-                if (result != AddState.ExistNormal)
+                if (addState != AddState.ExistNormal)
                 {
-                    await FindLinksInViewAsync(link);
+                    await AddLinksFromViewAsync(link);
                 }
-
             }
-            page.WorkState = WorkState.Complete;
+
+            currentPage.WorkState = WorkState.Complete;
             return true;
         }
 
         /// <summary>
-        /// Send request to site/sitemap.xml, find links and add it to repo
+        /// Send request to sitemap url, find links and add it to repository
         /// </summary>
-        public async Task<bool> FindLinksInSitemapAsync()
+        public async Task<bool> AddLinksFromSitemapAsync()
         {
-            if (this.BaseUrl.Length == 0) return false;
+            if (BaseUrl.Length == 0) return false;
 
-            var sitemap = new Link(this.FindSitemapUrl(), LocationUrl.InSiteMap);
+            var sitemapLink = new Link(GetSitemapUrl(), LocationUrl.InSiteMap);
+            var responseMessage = await GetResponseMessage(sitemapLink);
+            var linkList = await RequestService.ToLinkList(responseMessage, sitemapLink);
 
-            var responseMessage = await RequestService.SendRequestAsync(sitemap.Url);
-
-            var sitemapList = await RequestService.ConvertLinks(responseMessage,sitemap);
-
-            foreach (var link in sitemapList)
+            foreach (var link in linkList)
             {
-                if (this.LinkFilter.IsInDomain(link.Url, this.BaseUrl) == false) continue;
-                var result = await LinkRepository.AddAsync(link);
+                if (LinkFilter.IsInDomain(link.Url, BaseUrl) == false) 
+                        continue;
 
+                var result = await LinkRepository.AddAsync(link);
                 if (result == AddState.AddAsNew)
-                {
-                    await TimeRequest(link);
+                {//needed for setup time request
+                    await GetResponseMessage(link);
                 }
             }
+
             return true;
         }
 
-        protected async Task<HttpResponseMessage> TimeRequest(Link link)
+        /// <summary>
+        /// Return responseMessage on request and setup time input variable
+        /// </summary>
+        /// <param name="link"></param>
+        /// <returns></returns>
+        private async Task<HttpResponseMessage> GetResponseMessage(Link link)
         {
             var startTime = Stopwatch.StartNew();
             var responseMessage = await RequestService.SendRequestAsync(link.Url);
@@ -132,12 +140,13 @@ namespace UKAD.Services
             link.TimeDuration = (int)startTime.ElapsedMilliseconds;
             return responseMessage;
         }
+
         /// <summary>
         /// Find sitemap.xml file in this domain
         /// </summary>
-        protected virtual string FindSitemapUrl()
+        private string GetSitemapUrl()
         {
-            return this.BaseUrl + "/sitemap.xml";
+            return BaseUrl + "/sitemap.xml";
         }
 
     }

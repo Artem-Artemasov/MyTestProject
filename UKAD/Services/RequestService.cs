@@ -14,14 +14,15 @@ namespace UKAD.Services
     public class RequestService:IRequestService
     {
         public string BaseUrl { get; private set; }
-        private string Host { get; set; }
+        private string Protocol { get; set; }
         private string UrlWithHost { get; set; }
         public RequestService(string baseUrl)
         {
             this.BaseUrl = baseUrl;
-            this.Host = baseUrl.Substring(0, baseUrl.IndexOf("//") + 2);
+            this.Protocol = baseUrl.Substring(0, baseUrl.IndexOf("//") + 2);
             this.UrlWithHost = baseUrl[(baseUrl.IndexOf("//") + 2)..];
         }
+
         /// <summary>
         /// Send get request on page
         /// </summary>
@@ -43,113 +44,136 @@ namespace UKAD.Services
                     Console.WriteLine(page + " do not avaliable");
                 }
             }
-
             return responseMessage;
         }
-        public virtual async Task<IEnumerable<Link>> ConvertLinks(HttpResponseMessage responseMessage,Link link)
+
+        /// <summary>
+        /// Parse Http message to Link objects
+        /// </summary>
+        /// <param name="responseMessage"></param>
+        /// <param name="link"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Link>> ToLinkList(HttpResponseMessage responseMessage,Link link)
         {
             List<Link> links = new List<Link>();
+
+            var defaultDelimiters = GetDefaultUrlDelimiters(link.LocationUrl);
 
             if (responseMessage.IsSuccessStatusCode)
             {
                 string message = await responseMessage.Content.ReadAsStringAsync();
-                var urls = ParseMessageToUrl(message, link.LocationUrl).ToList();
-                links = ConvertRelateToAbsolute(urls, link.Url, link.LocationUrl).ToList();
+                var urls = CutAllUrls(message, link.LocationUrl,defaultDelimiters).ToList();
+                links = ToAbsoluteUrlList(urls, link.Url, link.LocationUrl).ToList();
             }
 
             return links;
         }
+
         /// <summary>
         /// Find all links, 
-        /// If we finding in view, it looked on href and src attributes
+        /// If we finding in view, it looked on 
         /// If we finding in sitemap it looked on <loc> tag
         /// </summary>
-        public virtual IEnumerable<string> ParseMessageToUrl(string message, LocationUrl location)
+        public IEnumerable<string> CutAllUrls(string message, LocationUrl location,in Dictionary<string,string> urlDelimiters)
         {
-            Regex regex;
+            //Url start after "key",Url end before "value"
             List<string> urls = new List<string>();
 
-            if (location == LocationUrl.InSiteMap)
+            foreach (var key in urlDelimiters.Keys)
             {
-                regex = new Regex(@"(?<1>(ht)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*))"
-                                , RegexOptions.Multiline | RegexOptions.ExplicitCapture);
-            }
-            else
-            {
-                regex = new Regex(@"(href|src)\s*=\s*([""'](?<1>([^""']*))[""'])",
-                    RegexOptions.Multiline | RegexOptions.ExplicitCapture);
-            }
-
-
-            MatchCollection matches = regex.Matches(message);
-
-            if (matches.Count > 0)
-            {
-                urls.AddRange(matches.Select(p => p.Groups[1].Value));
-
-                /*foreach (Match match in matches)
+                int currentPos = 0;
+                int indexOfKey = 0;
+                while ((message.Length > currentPos) && (indexOfKey != -1))
                 {
-                    urls.Add(match.Groups[1].Value);
-                }*/
+                    indexOfKey = message.IndexOf(key, currentPos);
+                    if (indexOfKey != -1)
+                    {
+                        var value = urlDelimiters.GetValueOrDefault(key);
+                        int indexOfVal = message.IndexOf(value, indexOfKey + key.Length);
+                        if (indexOfVal == -1)
+                            indexOfVal = message.Length;
+
+                        urls.Add(message[(indexOfKey + key.Length)..indexOfVal]);
+                        currentPos = indexOfVal + value.Length;
+                    }
+                }
             }
 
             return urls;
         }
 
         /// <summary>
-        /// Convert a revalite url to absolute with help baseUrl
+        /// Default delimiters is 
+        /// <loc></loc> for sitemap.xml
+        /// href src for view
         /// </summary>
-        /// P.s Метод сильно громозкий, но пока не появилось идей как уменьшить
+        /// <param name="location"></param>
         /// <returns></returns>
-        public virtual IEnumerable<Link> ConvertRelateToAbsolute(IEnumerable<string> input, string baseUrl, LocationUrl location)
+        public Dictionary<string,string> GetDefaultUrlDelimiters(LocationUrl location)
+        {
+            Dictionary<string, string> defaultDelimiters = new Dictionary<string, string>();
+
+            if (location == LocationUrl.InSiteMap)
+            {
+                defaultDelimiters.Add("<loc>", "</loc>");
+            }
+            else
+            {
+                defaultDelimiters.Add("href=\"", "\"");
+                defaultDelimiters.Add("href='", "'");
+                defaultDelimiters.Add("src=\"", "\"");
+                defaultDelimiters.Add("src='", "'");
+            }
+            return defaultDelimiters;
+        }
+       
+        public IEnumerable<Link> ToAbsoluteUrlList(IEnumerable<string> input, string relativelyFrom, LocationUrl location)
         {
             List<Link> ablosuteUrl = new List<Link>();
 
             foreach (string item in input)
             {
+                //absolute path
                 if (item.StartsWith("http://") || item.StartsWith("https://"))
                 {
                     ablosuteUrl.Add(new Link(item, location));
                     continue;
                 }
-
-                if (item.StartsWith("//") && !item.Contains(this.Host))
+                //example: item == //example.com/ => add https://www.example.com/
+                if (item.StartsWith("//") && !item.Contains(Protocol))
                 {
-                    ablosuteUrl.Add(new Link(this.Host + item[2..], location));
+                    ablosuteUrl.Add(new Link(Protocol + item[2..], location));
                     continue;
                 }
-
+                
                 if (item == "/")
                 {
-                    ablosuteUrl.Add(new Link(this.BaseUrl, location));
+                    ablosuteUrl.Add(new Link(BaseUrl, location));
                     continue;
                 }
-
-
-                if (baseUrl.EndsWith(item))
+                //example revativelyFrom == https://www.example.com/something and item == something/text.html => https://www.example.com/something/text.html 
+                if (relativelyFrom.EndsWith(item))
                 {
-                    string absolute;
-                    absolute = baseUrl.Substring(0, baseUrl.IndexOf(item)) + item;
+                    var absolute = relativelyFrom.Substring(0, relativelyFrom.IndexOf(item)) + item;
                     ablosuteUrl.Add(new Link(absolute, location));
                     continue;
                 }
-
+                //example item == /books => add BaseUrl/books
                 if (item.StartsWith("/"))
                 {
-                    ablosuteUrl.Add(new Link(this.BaseUrl + item, location));
+                    ablosuteUrl.Add(new Link(BaseUrl + item, location));
                     continue;
                 }
-
+                //example item == ./books/firstbook.html and relativelyFrom == https://www.example.com/library/magazine => https://www.example.com/library/books/firstbook.html
                 if (item.StartsWith("./"))
                 {
-                    string absolute = baseUrl;
+                    string absolute = relativelyFrom;
                     string relative = item;
                     while (relative.StartsWith("./"))
                     {
-                        absolute = absolute.Substring(0, baseUrl.LastIndexOf("/"));
+                        absolute = absolute.Substring(0, relativelyFrom.LastIndexOf("/"));
                         relative = relative[2..];
                     }
-
                     ablosuteUrl.Add(new Link(absolute + "/" + relative, location));
                     continue;
                 }
