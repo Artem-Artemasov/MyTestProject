@@ -13,12 +13,23 @@ namespace UKAD.Models
         public LocationUrl LocationUrl { get; set; }
         public int TimeDuration { get; set; }
         public WorkState WorkState { get; set; }
-        public Link(string Url,LocationUrl location,int timeDuration = -1)
+
+        public Link(string url,LocationUrl location,int timeDuration = -1)
         {
-            this.Url = Url;
-            this.LocationUrl = location;
-            this.TimeDuration = timeDuration;
-            this.WorkState = WorkState.Create;
+            Url = url;
+            LocationUrl = location;
+            TimeDuration = timeDuration;
+            WorkState = WorkState.Create;
+        }
+
+        public Link(string url, LocationUrl location, WorkState workState, int timeDuration):this(url,location,timeDuration)
+        {
+            WorkState = workState;
+        }
+
+        public static Link Clone(Link link)
+        {
+            return new Link(link.Url, link.LocationUrl, link.WorkState, link.TimeDuration);
         }
     }
 }

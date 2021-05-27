@@ -64,10 +64,8 @@ namespace UKAD.Services
         {
             if (BaseUrl.Length == 0) 
                     return false;
-
             if (LinkRepository.Exist(currentPage)) 
                     return true;
-
             if (LinkRepository.IsProcessing(currentPage) && currentPage.Url != BaseUrl) 
                     return true;
 
@@ -76,6 +74,8 @@ namespace UKAD.Services
             var responseMessage = await GetResponseMessage(currentPage);
             lock (LinkRepository)
             {
+
+                currentPage.Url = LinkFilter.ToSingleStyle(currentPage.Url);
                 LinkRepository.AddAsync(currentPage).Wait();
             }
 
@@ -87,10 +87,11 @@ namespace UKAD.Services
             foreach (var link in pageUrlList)
             {
                 AddState addState;
+
+                link.Url = LinkFilter.ToSingleStyle(link.Url);
                 lock (LinkRepository)  
-                {
-                    addState = LinkRepository.AddAsync(link).Result;
-                }
+                        addState = LinkRepository.AddAsync(link).Result;
+
                 if (addState != AddState.ExistNormal)
                 {
                     await AddLinksFromViewAsync(link);
@@ -117,8 +118,13 @@ namespace UKAD.Services
                 if (LinkFilter.IsInDomain(link.Url, BaseUrl) == false) 
                         continue;
 
-                var result = await LinkRepository.AddAsync(link);
-                if (result == AddState.AddAsNew)
+                link.Url = LinkFilter.ToSingleStyle(link.Url);
+
+                AddState addState;
+                lock (LinkRepository)
+                    addState = LinkRepository.AddAsync(link).Result;
+
+                if (addState == AddState.AddAsNew)
                 {//needed for setup time request
                     await GetResponseMessage(link);
                 }

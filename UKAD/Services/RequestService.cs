@@ -18,9 +18,9 @@ namespace UKAD.Services
         private string UrlWithHost { get; set; }
         public RequestService(string baseUrl)
         {
-            this.BaseUrl = baseUrl;
-            this.Protocol = baseUrl.Substring(0, baseUrl.IndexOf("//") + 2);
-            this.UrlWithHost = baseUrl[(baseUrl.IndexOf("//") + 2)..];
+            BaseUrl = baseUrl;
+            Protocol = baseUrl.Substring(0, baseUrl.IndexOf("//") + 2);
+            UrlWithHost = baseUrl[(baseUrl.IndexOf("//") + 2)..];
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace UKAD.Services
             {
                 int currentPos = 0;
                 int indexOfKey = 0;
-                while ((message.Length > currentPos) && (indexOfKey != -1))
+                while ((currentPos < message.Length) && (indexOfKey != -1))
                 {
                     indexOfKey = message.IndexOf(key, currentPos);
                     if (indexOfKey != -1)
@@ -181,6 +181,5 @@ namespace UKAD.Services
             }
             return ablosuteUrl;
         }
-
     }
 }

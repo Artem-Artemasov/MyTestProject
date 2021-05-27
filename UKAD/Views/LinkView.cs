@@ -10,15 +10,48 @@ namespace UKAD.Views
 {
     public class LinkView : ILinkView
     {
-        private IResultWritter resultWritter { get; set; }
+        private IResultWritter ResultWritter { get; set; }
 
         public LinkView(IResultWritter writter)
         {
-            resultWritter = writter;
+            ResultWritter = writter;
         }
-        public bool Processing()
+
+        public string ReadUrl()
         {
-            resultWritter.WriteLine("Program is working, please don't close it.");
+            ResultWritter.WriteLine("Please enter a basic url");
+            return ResultWritter.ReadLine();
+        }
+
+        public bool PrintAllInformation(LinkRepository linkRepository)
+        {
+            ResultWritter.WriteLine("\n\n\n");
+            ResultWritter.WriteLine("\t Urls FOUNDED IN SITEMAP.XML but not founded after crawling a web site");
+            PrintList(linkRepository.GetSiteMapLinksAsync().Result);
+
+            ResultWritter.WriteLine("\n\n\n");
+            ResultWritter.WriteLine("\tUrls FOUNDED BY CRAWLING THE WEBSITE but not in sitemap.xml");
+            PrintList(linkRepository.GetViewLinksAsync().Result);
+
+            ResultWritter.WriteLine("\n\n\n");
+            ResultWritter.WriteLine("\t Timing");
+            PrintWithTime(linkRepository.GetAllLinksAsync().Result);
+            ResultWritter.WriteLine("\n\n\n");
+
+            PrintCounts(linkRepository);
+
+            return true;
+        }
+
+        public bool PrintProcessingMessage()
+        {
+            ResultWritter.WriteLine("Program is working, please don't close it.");
+            return true;
+        }
+
+        public bool PrintErrorMessage(string errorMessage)
+        {
+            ResultWritter.WriteLine(errorMessage);
             return true;
         }
 
@@ -31,9 +64,9 @@ namespace UKAD.Views
             int sitemapCount = allCount - linkRepository.GetViewLinksAsync().Result.Count();
             int viewCount = allCount - linkRepository.GetSiteMapLinksAsync().Result.Count();
 
-            resultWritter.WriteLine($"All founded urls - {allCount} \n");
-            resultWritter.WriteLine($"Urls found in sitemap: {sitemapCount} \n");
-            resultWritter.WriteLine($"Urls(html documents) found after crawling a website: {viewCount} \n");
+            ResultWritter.WriteLine($"All founded urls - {allCount} \n");
+            ResultWritter.WriteLine($"Urls found in sitemap: {sitemapCount} \n");
+            ResultWritter.WriteLine($"Urls(html documents) found after crawling a website: {viewCount} \n");
 
             return true;
         }
@@ -47,8 +80,8 @@ namespace UKAD.Views
             int i = 1;
             foreach (var link in links)
             {
-                resultWritter.WriteLine("\n");
-                resultWritter.WriteLine($" {i}) " + link.Url);
+                ResultWritter.WriteLine("\n");
+                ResultWritter.WriteLine($" {i}) " + link.Url);
                 WriteRaw('_');
                 i++;
             }
@@ -63,25 +96,25 @@ namespace UKAD.Views
         {
             int i = 1;
             WriteRaw('_');
-            resultWritter.Write("|  Url");
+            ResultWritter.Write("|  Url");
 
-            resultWritter.ChangeCursorPositonX(resultWritter.GetOutputWidth() - 16);
+            ResultWritter.ChangeCursorPositonX(ResultWritter.GetOutputWidth() - 16);
 
-            resultWritter.WriteLine(" | Timing (ms)");
+            ResultWritter.WriteLine(" | Timing (ms)");
             WriteRaw('_');
             foreach (var link in links)
             {
-                if (link.Url.Length > resultWritter.GetOutputWidth() - 25)
+                if (link.Url.Length > ResultWritter.GetOutputWidth() - 25)
                 {
-                    link.Url = InsertNewLine(link.Url, (resultWritter.GetOutputWidth() - 25));
+                    link.Url = InsertNewLine(link.Url, (ResultWritter.GetOutputWidth() - 25));
                 }
 
-                resultWritter.WriteLine("\n|  ");
-                resultWritter.Write($"{i}) " + link.Url);
+                ResultWritter.WriteLine("\n|  ");
+                ResultWritter.Write($"{i}) " + link.Url);
 
-                resultWritter.ChangeCursorPositonX(resultWritter.GetOutputWidth() - 15);
+                ResultWritter.ChangeCursorPositonX(ResultWritter.GetOutputWidth() - 15);
 
-                resultWritter.WriteLine(" | " + link.TimeDuration + "ms  |" );
+                ResultWritter.WriteLine(" | " + link.TimeDuration + "ms  |" );
                 i++;
                 WriteRaw('_');
             }
@@ -113,9 +146,9 @@ namespace UKAD.Views
         /// <returns></returns>
         public bool WriteRaw(char symbol)
         {
-            for(int i = 0; i < resultWritter.GetOutputWidth(); i++)
+            for(int i = 0; i < ResultWritter.GetOutputWidth(); i++)
             {
-                resultWritter.Write(symbol.ToString());
+                ResultWritter.Write(symbol.ToString());
             }
             return true;
         }

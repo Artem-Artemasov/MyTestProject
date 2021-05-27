@@ -29,24 +29,20 @@ namespace UKAD.Controllers
         /// If url valid, started parsing site
         /// </summary>
 
-        public async Task<bool> AddAllLinksAsync()
+        private async Task<bool> AddAllLinksAsync()
         {
-            Console.WriteLine("Please type a basic url");
-            string input = Console.ReadLine();
+            var input = LinkView.ReadUrl();
 
             if (LinkFilter.IsCorrectLink(input))
             {
-                if (input.EndsWith("/")) input = input.Substring(0, input.Length - 1);
+                if (input.EndsWith("/")) 
+                        input = input.Substring(0, input.Length - 1);
 
-                input = LinkFilter.AddWWW(input);
-
+                input = LinkFilter.ToSingleStyle(input);
                 LinkService.SetUpBaseUrl(input);
-
-                LinkView.Processing();
+                LinkView.PrintProcessingMessage();
 
                 await LinkService.AnalyzeSiteForUrlAsync();
-                
-                Console.Clear();
 
                 return true;
             }
@@ -58,41 +54,21 @@ namespace UKAD.Controllers
 
         /// <summary>
         /// It starting parse url and start Menu method
+        /// Needed time for work
         /// </summary>
         public bool StartWork()
         {
-            if (this.AddAllLinksAsync().Result == false)
+            if (AddAllLinksAsync().Result == false)
             {
-                Console.WriteLine("You entered a bad url");
+                LinkView.PrintErrorMessage("You entered a bad url");
                 return false;
             };
 
             LinkRepository.Sort(p => p.TimeDuration);
-            Console.ForegroundColor = ConsoleColor.White;
 
-            Menu();
+            LinkView.PrintAllInformation(LinkRepository);
 
             return false;
-        }
-
-        private bool Menu()
-        {
-            Console.WriteLine("\n\n\n");
-            Console.WriteLine("\t Urls FOUNDED IN SITEMAP.XML but not founded after crawling a web site");
-            LinkView.PrintList(LinkRepository.GetSiteMapLinksAsync().Result);
-            Console.WriteLine("\n\n\n");
-
-            Console.WriteLine("\tUrls FOUNDED BY CRAWLING THE WEBSITE but not in sitemap.xml");
-            LinkView.PrintList(LinkRepository.GetViewLinksAsync().Result);
-            Console.WriteLine("\n\n\n");
-
-
-            Console.WriteLine("\t Timing");
-            LinkView.PrintWithTime(LinkRepository.GetAllLinksAsync().Result);
-            Console.WriteLine("\n\n\n");
-
-            LinkView.PrintCounts(LinkRepository);
-            return true;
         }
     }
 }

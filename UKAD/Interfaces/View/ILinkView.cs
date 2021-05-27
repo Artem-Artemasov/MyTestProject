@@ -10,9 +10,12 @@ namespace UKAD.Interfaces
 {
     public interface ILinkView
     {
-         bool Processing();
-         bool PrintList(IEnumerable<Link> links);
-         bool PrintCounts(LinkRepository links);
-         bool PrintWithTime(IEnumerable<Link> links);
+        string ReadUrl();
+        bool PrintProcessingMessage();
+        bool PrintErrorMessage(string errorMessage);
+        bool PrintList(IEnumerable<Link> links);
+        bool PrintCounts(LinkRepository links);
+        bool PrintWithTime(IEnumerable<Link> links);
+        bool PrintAllInformation(LinkRepository linkRepository);
     }
 }

@@ -10,6 +10,7 @@ namespace UKAD.Interfaces.View
     {
         void WriteLine(string line);
         void Write(string line);
+        string ReadLine();
         int GetOutputWidth();
         void ChangeCursorPositonX(int newPos);
     }

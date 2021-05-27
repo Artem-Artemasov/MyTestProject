@@ -3,7 +3,7 @@ using UKAD.Interfaces.View;
 
 namespace UKAD.Views
 {
-    public class ResultWritter : IResultWritter
+    public class ConsoleWritter : IResultWritter
     {
         public void WriteLine(string line)
         {
@@ -23,6 +23,11 @@ namespace UKAD.Views
         public void ChangeCursorPositonX(int newPos)
         {
             Console.CursorLeft = newPos;
+        }
+
+        public string ReadLine()
+        {
+            return Console.ReadLine();
         }
     }
 }

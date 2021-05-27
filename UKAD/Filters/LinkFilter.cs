@@ -52,17 +52,19 @@ namespace UKAD.Filters
         }
 
         /// <summary>
-        /// Add www. when link not contains it
+        /// example ToSingleStyle("https://example.com") = > https://www.example.com/
         /// </summary>
         /// <param name="link"></param>
         /// <returns></returns>
-        public virtual string AddWWW(string link)
+        public virtual string ToSingleStyle(string link)
         {
             if (link.Contains("www.") == false)
             {
                 int httpIndex = link.IndexOf("//") + 2;
                 link = link.Insert(httpIndex, "www.");
             }
+
+            if (link.EndsWith("/") == false) link += "/";
 
             return link;
         }

@@ -11,12 +11,10 @@ namespace UKAD.Repository
     public class LinkRepository
     {
         private List<Link> Links { get; set; }
-        private LinkFilter LinkFilter { get; set; }
 
         public LinkRepository()
         {
             Links = new List<Link>();
-            LinkFilter = new LinkFilter();
         }
 
         /// <summary>
@@ -25,12 +23,10 @@ namespace UKAD.Repository
         ///              setup the link Location.All and return AddAsAllLocation
         /// If input Link exist in allLinks and it equal, function return ExistEquals 
         /// </summary>
-        public virtual async Task<AddState> AddAsync(Link link)
+        public virtual async Task<AddState> AddAsync(Link inputLink)
         {
 
-            link.Url = LinkFilter.AddWWW(link.Url);
-
-            if (link.Url.EndsWith("/") == false) link.Url = link.Url + "/";
+            var link = Link.Clone(inputLink);
 
             if (Links.Exists(p => (p.Url == link.Url)) == false)
             {

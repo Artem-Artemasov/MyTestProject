@@ -42,7 +42,7 @@ namespace UKAD.Tests
         }
 
         [Test]
-        public void Add_NewLink_ShouldAddAsNew()
+        public void Add_NewCorrectLink_ShouldAddAsNew()
         {
             //Arrange
             var link = new Link("https://wwww.ukad-group.com/", LocationUrl.InView);
@@ -52,6 +52,34 @@ namespace UKAD.Tests
 
             //Assert
             Assert.AreEqual(result, AddState.AddAsNew);
+        }
+
+        [Test]
+        public void Add_ExitsLinkWithotTime_AddStateWithOutTime()
+        {
+            //Arrange
+            var link = new Link("https://wwww.ukad-group.com/", LocationUrl.InView);
+
+            //Act
+            linkRepository.AddAsync(link).Wait();
+            var result = linkRepository.AddAsync(link).Result;
+
+            //Assert
+            Assert.AreEqual(result, AddState.ExistWithoutTime);
+        }
+
+        [Test]
+        public void Add_LinkExistAndHaveDifferentLocation_AddStateAsAllLocation()
+        {
+            //Arrange
+            var link = new Link("https://wwww.ukad-group.com/", LocationUrl.InView);
+            linkRepository.AddAsync(link).Wait();
+            link.Url = "";
+
+            //Act
+            var f = linkRepository.GetAllLinksAsync().Result.First();
+            //Assert
+            Assert.AreEqual(f.Url,"");
         }
     }
 }
