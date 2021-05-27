@@ -11,7 +11,7 @@ using UKAD.Models;
 
 namespace UKAD.Services
 {
-    public class RequestService:IRequestService
+    public class RequestService : IRequestService
     {
         public string BaseUrl { get; private set; }
         private string Protocol { get; set; }
