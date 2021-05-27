@@ -63,6 +63,11 @@ namespace UKAD.Repository
             return Links.ToList();
         }
 
+        /// <summary>
+        /// Not use the GetLinksAsync() for support forwards communication with storage
+        /// </summary>
+        /// <param name="func"></param>
+        /// <returns></returns>
         public virtual async Task<IEnumerable<Link>> GetLinksAsync(Func<Link,bool> func)
         {
             return Links.Where(func).ToList();

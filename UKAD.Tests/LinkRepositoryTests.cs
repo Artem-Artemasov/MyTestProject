@@ -105,7 +105,23 @@ namespace UKAD.Tests
             var link = new Link("https://wwww.ukad-group.com/", LocationUrl.All, 100);
             LinkRepository.AddAsync(link).Wait();
             var beforeChange = LinkRepository.GetLinksAsync().Result.ToList();
-            var afterChange = LinkRepository.GetLinksAsync().Result.ToList();
+            var afterChange  = LinkRepository.GetLinksAsync().Result.ToList();
+
+            //Act
+            afterChange.Remove(afterChange.FirstOrDefault());
+
+            //Assert
+            Assert.AreNotEqual(afterChange.Count, beforeChange.Count);
+        }
+
+        [Test]
+        public void GetAllLinksAsync_TryChangeOutsideWithDelegate_ShouldNotChange()
+        {
+            //Arrange
+            var link = new Link("https://wwww.ukad-group.com/", LocationUrl.All, 100);
+            LinkRepository.AddAsync(link).Wait();
+            var beforeChange = LinkRepository.GetLinksAsync(p => p.LocationUrl == LocationUrl.All).Result.ToList();
+            var afterChange  = LinkRepository.GetLinksAsync(p => p.LocationUrl == LocationUrl.All).Result.ToList();
 
             //Act
             afterChange.Remove(afterChange.FirstOrDefault());
