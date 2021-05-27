@@ -10,76 +10,108 @@ namespace UKAD.Tests
     // Не забыть написать такс на изменение коллекции из вне
     public class LinkRepositoryTests
     {
-        LinkRepository linkRepository;
+        LinkRepository LinkRepository;
         [SetUp]
         public void SetUp()
         {
-            linkRepository = new LinkRepository();
+            LinkRepository = new LinkRepository();
         }
 
-        [Test]
+    /*    [Test]
         public void IsProcessing_EmptyString_ReturnFalse() 
         {
             //Act
-            var result = linkRepository.IsProcessing(new Link("", LocationUrl.NotFound));
+            var result = LinkRepository.IsProcessing(new Link("", LocationUrl.NotFound));
 
             //Assert
             Assert.IsFalse(result);
-        }
+        }*/
 
         [Test]
-        public void Add_CorrectLink_ShouldAddIt()
+        public void AddAsync_CorrectLink_ShouldAddIt()
         {
             //Arrange
             var link = new Link("https://wwww.ukad-group.com/", LocationUrl.InView, 100);
 
             //Act
-            linkRepository.AddAsync(link).Wait();
+            LinkRepository.AddAsync(link).Wait();
 
             //Assert
-            Assert.IsTrue(linkRepository.GetAllLinksAsync().Result.ToList().Count == 1);
+            Assert.IsTrue(LinkRepository.GetLinksAsync().Result.ToList().Count == 1);
 
         }
 
         [Test]
-        public void Add_NewCorrectLink_ShouldAddAsNew()
+        public void AddAsync_NewCorrectLink_ShouldAddAsNew()
         {
             //Arrange
             var link = new Link("https://wwww.ukad-group.com/", LocationUrl.InView);
 
             //Act
-            var result = linkRepository.AddAsync(link).Result;
+            var result = LinkRepository.AddAsync(link).Result;
 
             //Assert
             Assert.AreEqual(result, AddState.AddAsNew);
         }
 
         [Test]
-        public void Add_ExitsLinkWithotTime_AddStateWithOutTime()
+        public void AddAsync_ExitsLinkWithotTime_AddStateWithOutTime()
         {
             //Arrange
             var link = new Link("https://wwww.ukad-group.com/", LocationUrl.InView);
 
             //Act
-            linkRepository.AddAsync(link).Wait();
-            var result = linkRepository.AddAsync(link).Result;
+            LinkRepository.AddAsync(link).Wait();
+            var result = LinkRepository.AddAsync(link).Result;
 
             //Assert
             Assert.AreEqual(result, AddState.ExistWithoutTime);
         }
 
         [Test]
-        public void Add_LinkExistAndHaveDifferentLocation_AddStateAsAllLocation()
+        public void AddAsync_LinkExistAndHaveDifferentLocation_AddStateAsAllLocation()
         {
             //Arrange
-            var link = new Link("https://wwww.ukad-group.com/", LocationUrl.InView);
-            linkRepository.AddAsync(link).Wait();
-            link.Url = "";
+            var link = new Link("https://wwww.ukad-group.com/", LocationUrl.InView,100);
+            LinkRepository.AddAsync(link).Wait();
+            link.LocationUrl = LocationUrl.InSiteMap;
 
             //Act
-            var f = linkRepository.GetAllLinksAsync().Result.First();
+            var result = LinkRepository.AddAsync(link).Result;
+
             //Assert
-            Assert.AreEqual(f.Url,"");
+            Assert.AreEqual(result,AddState.AddAsAllLocation);
+        }
+
+        [Test]
+        public void AddAsync_ExistingLink_AddStateExitNormal()
+        {
+            //Arrange
+            var link = new Link("https://wwww.ukad-group.com/", LocationUrl.All, 100);
+            LinkRepository.AddAsync(link).Wait();
+            link.LocationUrl = LocationUrl.InSiteMap;
+
+            //Act
+            var result = LinkRepository.AddAsync(link).Result;
+
+            //Assert
+            Assert.AreEqual(result, AddState.ExistNormal);
+        }
+
+        [Test]
+        public void GetAllLinksAsync_TryChangeOutside_ShouldNotChange()
+        {
+            //Arrange
+            var link = new Link("https://wwww.ukad-group.com/", LocationUrl.All, 100);
+            LinkRepository.AddAsync(link).Wait();
+            var beforeChange = LinkRepository.GetLinksAsync().Result.ToList();
+            var afterChange = LinkRepository.GetLinksAsync().Result.ToList();
+
+            //Act
+            afterChange.Remove(afterChange.FirstOrDefault());
+
+            //Assert
+            Assert.AreNotEqual(afterChange.Count, beforeChange.Count);
         }
     }
 }

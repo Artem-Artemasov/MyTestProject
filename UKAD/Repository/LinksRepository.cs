@@ -58,12 +58,17 @@ namespace UKAD.Repository
 
         }
 
-        public virtual async Task<IEnumerable<Link>> GetAllLinksAsync()
+        public virtual async Task<IEnumerable<Link>> GetLinksAsync()
         {
             return Links.ToList();
         }
 
-        public virtual async Task<IEnumerable<Link>> GetSiteMapLinksAsync()
+        public virtual async Task<IEnumerable<Link>> GetLinksAsync(Func<Link,bool> func)
+        {
+            return Links.Where(func).ToList();
+        }
+
+/*        public virtual async Task<IEnumerable<Link>> GetSiteMapLinksAsync()
         {
             return Links.Where(p => p.LocationUrl == LocationUrl.InSiteMap).ToList();
         }
@@ -71,7 +76,7 @@ namespace UKAD.Repository
         public virtual async Task<IEnumerable<Link>> GetViewLinksAsync()
         {
             return Links.Where(p => p.LocationUrl == LocationUrl.InView).ToList();
-        }
+        }*/
 
         public virtual bool Sort(Func<Link,object> func)
         {
@@ -83,7 +88,7 @@ namespace UKAD.Repository
         {
             var url = link.Url;
             var foundedLink = Links.Find(p => p.Url == url);
-            if (foundedLink != null && foundedLink.WorkState == WorkState.Processing)
+            if (null != foundedLink && foundedLink.WorkState == WorkState.Processing)
                     return true;
 
             return false;

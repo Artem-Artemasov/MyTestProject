@@ -27,15 +27,15 @@ namespace UKAD.Views
         {
             ResultWritter.WriteLine("\n\n\n");
             ResultWritter.WriteLine("\t Urls FOUNDED IN SITEMAP.XML but not founded after crawling a web site");
-            PrintList(linkRepository.GetSiteMapLinksAsync().Result);
+            PrintList(linkRepository.GetLinksAsync(p=>p.LocationUrl == Enums.LocationUrl.InSiteMap).Result);
 
             ResultWritter.WriteLine("\n\n\n");
             ResultWritter.WriteLine("\tUrls FOUNDED BY CRAWLING THE WEBSITE but not in sitemap.xml");
-            PrintList(linkRepository.GetViewLinksAsync().Result);
+            PrintList(linkRepository.GetLinksAsync(p => p.LocationUrl == Enums.LocationUrl.InView).Result);
 
             ResultWritter.WriteLine("\n\n\n");
             ResultWritter.WriteLine("\t Timing");
-            PrintWithTime(linkRepository.GetAllLinksAsync().Result);
+            PrintWithTime(linkRepository.GetLinksAsync().Result);
             ResultWritter.WriteLine("\n\n\n");
 
             PrintCounts(linkRepository);
@@ -60,9 +60,9 @@ namespace UKAD.Views
         /// </summary>
         public bool PrintCounts(LinkRepository linkRepository)
         {
-            int allCount = linkRepository.GetAllLinksAsync().Result.Count();
-            int sitemapCount = allCount - linkRepository.GetViewLinksAsync().Result.Count();
-            int viewCount = allCount - linkRepository.GetSiteMapLinksAsync().Result.Count();
+            int allCount = linkRepository.GetLinksAsync().Result.Count();
+            int sitemapCount = allCount - linkRepository.GetLinksAsync(p => p.LocationUrl == Enums.LocationUrl.InView).Result.Count();
+            int viewCount = allCount - linkRepository.GetLinksAsync(p => p.LocationUrl == Enums.LocationUrl.InSiteMap).Result.Count();
 
             ResultWritter.WriteLine($"All founded urls - {allCount} \n");
             ResultWritter.WriteLine($"Urls found in sitemap: {sitemapCount} \n");
