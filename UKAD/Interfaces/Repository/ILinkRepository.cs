@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UKAD.Enums;
 using UKAD.Models;
 
-namespace UKAD.Interfaces
+namespace UKAD.Interfaces.Repository
 {
     public interface ILinkRepository
     {

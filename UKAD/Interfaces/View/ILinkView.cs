@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UKAD.Models;
-using UKAD.Repository;
+using UKAD.Interfaces.Repository;
 
 namespace UKAD.Interfaces.View
 {
@@ -14,8 +10,8 @@ namespace UKAD.Interfaces.View
         bool PrintProcessingMessage();
         bool PrintErrorMessage(string errorMessage);
         bool PrintList(IEnumerable<Link> links);
-        bool PrintCounts(LinkRepository links);
+        bool PrintCounts(ILinkRepository links);
         bool PrintWithTime(IEnumerable<Link> links);
-        bool PrintAllInformation(LinkRepository linkRepository);
+        bool PrintAllInformation(ILinkRepository linkRepository);
     }
 }

@@ -7,7 +7,7 @@ using UKAD.Enums;
 using UKAD.Filters;
 using UKAD.Interfaces;
 using UKAD.Models;
-using UKAD.Repository;
+using UKAD.Interfaces.Repository;
 
 namespace UKAD.Services
 {
@@ -15,13 +15,13 @@ namespace UKAD.Services
     {
         private const int MaxTaskConst = 1;
         public string BaseUrl { get; private set; }
-        public LinkRepository LinkRepository { get; set; }
+        public ILinkRepository LinkRepository { get; set; }
         public LinkFilter LinkFilter { get; private set; }
         public RequestService RequestService { get; private set; }
         private string Host { get; set; }
         private string UrlWithHost { get; set; }
 
-        public LinkService(LinkRepository linkRepository)
+        public LinkService(ILinkRepository linkRepository)
         {
             LinkRepository = linkRepository;
             LinkFilter = new LinkFilter();
