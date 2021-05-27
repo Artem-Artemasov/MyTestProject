@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UKAD.Models;
 using UKAD.Repository;
 
-namespace UKAD.Interfaces
+namespace UKAD.Interfaces.View
 {
     public interface ILinkView
     {
