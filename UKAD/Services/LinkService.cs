@@ -26,6 +26,7 @@ namespace UKAD.Services
             LinkRepository = linkRepository;
             LinkFilter = new LinkFilter();
         }
+
         public void SetUpBaseUrl(string baseUrl)
         {
             RequestService = new RequestService(baseUrl);

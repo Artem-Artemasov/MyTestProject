@@ -41,7 +41,7 @@ namespace UKAD.Services
                 }
                 catch
                 {
-                    Console.WriteLine(page + " do not avaliable");
+                    return new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.RequestTimeout };
                 }
             }
             return responseMessage;
@@ -62,7 +62,7 @@ namespace UKAD.Services
             if (responseMessage.IsSuccessStatusCode)
             {
                 string message = await responseMessage.Content.ReadAsStringAsync();
-                var urls = CutAllUrls(message, link.LocationUrl,defaultDelimiters).ToList();
+                var urls = CutAllUrls(message,defaultDelimiters).ToList();
                 links = ToAbsoluteUrlList(urls, link.Url, link.LocationUrl).ToList();
             }
 
@@ -74,7 +74,7 @@ namespace UKAD.Services
         /// If we finding in view, it looked on 
         /// If we finding in sitemap it looked on <loc> tag
         /// </summary>
-        public IEnumerable<string> CutAllUrls(string message, LocationUrl location,in Dictionary<string,string> urlDelimiters)
+        public IEnumerable<string> CutAllUrls(string message,in Dictionary<string,string> urlDelimiters)
         {
             //Url start after "key",Url end before "value"
             List<string> urls = new List<string>();
@@ -151,7 +151,7 @@ namespace UKAD.Services
                     ablosuteUrl.Add(new Link(BaseUrl, location));
                     continue;
                 }
-                //example revativelyFrom == https://www.example.com/something and item == something/text.html => https://www.example.com/something/text.html 
+                //example revativelyFrom == https://www.example.com/something/ and item == /something => https://www.example.com/something
                 if (relativelyFrom.EndsWith(item))
                 {
                     var absolute = relativelyFrom.Substring(0, relativelyFrom.IndexOf(item)) + item;
@@ -171,7 +171,7 @@ namespace UKAD.Services
                     string relative = item;
                     while (relative.StartsWith("./"))
                     {
-                        absolute = absolute.Substring(0, relativelyFrom.LastIndexOf("/"));
+                        absolute = absolute.Substring(0, absolute.LastIndexOf("/"));
                         relative = relative[2..];
                     }
                     ablosuteUrl.Add(new Link(absolute + "/" + relative, location));
