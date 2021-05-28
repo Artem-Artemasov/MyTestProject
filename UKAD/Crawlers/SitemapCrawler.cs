@@ -1,27 +1,49 @@
 ﻿using System.Collections.Generic;
-using UKAD.Logic.Enums;
-using UKAD.Logic.Models;
-using UKAD.Logic.Services;
+using System.Linq;
+using LinkFounder.Logic.Validators;
+using LinkFounder.Logic.Models;
+using LinkFounder.Logic.Services;
 
-namespace UKAD.Logic.Crawlers
+namespace LinkFounder.Logic.Crawlers
 {
     public class SitemapCrawler
     {
-        public virtual IEnumerable<Link> SitemapLinkFindAsync(string baseUrl,LinkService linkService)
+        private readonly RequestService RequestService;
+        private readonly LinkParser LinkParser;
+        private readonly LinkValidator LinkFilter;
+
+        public SitemapCrawler(RequestService requestService, LinkParser linkProcessing, LinkValidator linkFilter)
         {
+            RequestService = requestService;
+            LinkProcessing = linkProcessing;
+            LinkFilter = linkFilter;
+        }
+
+        public virtual IEnumerable<Link> GetLinks(string baseUrl)
+        {
+            var storage = new List<Link>();
+
+            if (LinkFilter.IsCorrectLink(baseUrl) == false)
+                return storage;
+
             var sitemapLink = new Link(GetSitemapUrl(baseUrl));
             var responseMessage = RequestService.SendRequest(sitemapLink.Url, out int timeOfResponse);
             sitemapLink.TimeResponse = timeOfResponse;
-            var foundedLinkList =  linkService.ResponseToLinkList(responseMessage, sitemapLink, LinkService.GetDefaultUrlTags(LocationUrl.InSiteMap));
 
-            foreach (var link in foundedLinkList)
+            var parsedUrls = LinkParser.ResponseMsgToUrlList(responseMessage);
+            storage = LinkParser.RelativeToAbsolute(baseUrl, parsedUrls, baseUrl)
+                                  .Select(p => new Link(p))
+                                  .ToList();
+
+            foreach (var link in storage)
             {
                 RequestService.SendRequest(link.Url, out int timeResponse);
                 link.TimeResponse = timeResponse;
             }
 
-            return foundedLinkList;
+            return storage;
         }
+
         public virtual string GetSitemapUrl(string baseUrl)
         {
             return baseUrl + "/sitemap.xml";

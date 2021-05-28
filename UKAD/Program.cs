@@ -1,18 +1,18 @@
 ﻿using System.Threading.Tasks;
-using UKAD.Logic.Services;
+using LinkFounder.Logic.Crawlers;
+using LinkFounder.Logic.Services;
 
 namespace UKAD
 {
    
     class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
-            var f = new ViewCrawler();
-            var service = new LinkService("https://www.litedb.org/");
+            var s = new ViewCrawler(new RequestService(), new LinkProcessing(), new Logic.Filters.LinkValidator());
 
-            var s = f.GetViewLinks(service,new Logic.Filters.LinkFilter());
+            var sz = s.GetViewLinks("https://litedb.org");
+
         }
-        
     }
 }
