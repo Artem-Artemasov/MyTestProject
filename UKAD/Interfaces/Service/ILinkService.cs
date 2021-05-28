@@ -12,8 +12,8 @@ namespace UKAD.Interfaces
     public interface ILinkService
     {
          void SetUpBaseUrl(string baseUrl);
-         Task<bool> AddLinksFromViewAsync(Link page);
-         Task<bool> AddLinksFromSitemapAsync();
-         Task AnalyzeSiteForUrlAsync();
+         Task<bool> ViewLinkFindAsync(Link page);
+         Task<bool> SitemapLinkFindAsync();
+         Task AnalyzeAllSiteAsync();
     }
 }

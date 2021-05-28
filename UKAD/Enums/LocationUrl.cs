@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UKAD.Enums
+namespace UKAD.Logic.Enums
 {
     public enum LocationUrl:byte
     {

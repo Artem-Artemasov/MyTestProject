@@ -1,160 +1,137 @@
-﻿using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using UKAD.Enums;
-using UKAD.Filters;
-using UKAD.Interfaces;
-using UKAD.Models;
-using UKAD.Interfaces.Repository;
+using UKAD.Logic.Enums;
+using UKAD.Logic.Models;
+using System.Collections.Generic;
 
-namespace UKAD.Services
+namespace UKAD.Logic.Services
 {
-    public class LinkService:ILinkService
+    public class LinkService
     {
-        private const int MaxTaskConst = 1;
-        public string BaseUrl { get; private set; }
-        public ILinkRepository LinkRepository { get; set; }
-        public LinkFilter LinkFilter { get; private set; }
-        public RequestService RequestService { get; private set; }
-        private string Host { get; set; }
-        private string UrlWithHost { get; set; }
+        public readonly string BaseUrl;
 
-        public LinkService(ILinkRepository linkRepository)
+        public LinkService(string baseUrl)
         {
-            LinkRepository = linkRepository;
-            LinkFilter = new LinkFilter();
-        }
-
-        public void SetUpBaseUrl(string baseUrl)
-        {
-            RequestService = new RequestService(baseUrl);
             BaseUrl = baseUrl;
-            Host = baseUrl.Substring(0, baseUrl.IndexOf("//") + 2);
-            UrlWithHost = baseUrl[(baseUrl.IndexOf("//") + 2)..];
         }
 
-        /// <summary>
-        /// If baseUrl is not setup, this method do nothing 
-        /// Find links in sitemap and html code, add links in repository.
-        /// It needed more time for work
-        /// </summary>
-        public async Task AnalyzeSiteForUrlAsync()
+        public IEnumerable<string> CutUrlBetweenTags(string message, in Dictionary<string, string> urlTags)
         {
-            if (BaseUrl.Length == 0) return;
-
-            Task[] factory = new Task[MaxTaskConst];
-
-            for (int i = 0; i < MaxTaskConst; i++)
+            List<string> urls = new List<string>();
+  
+            foreach(var currentTags in urlTags) 
             {
-                Thread.Sleep(50);
-                factory[i] = Task.Factory.StartNew(() =>
-                AddLinksFromViewAsync(new Link(BaseUrl, Enums.LocationUrl.InView))).Result;
-            }
-
-            Task.WaitAll(factory);
-
-            await AddLinksFromSitemapAsync();
-        }
-
-        /// <summary>
-        /// Find all links in html code started with page
-        /// </summary>
-        public async Task<bool> AddLinksFromViewAsync(Link currentPage)
-        {
-            if (BaseUrl.Length == 0) 
-                    return false;
-            if (LinkRepository.Exist(currentPage)) 
-                    return true;
-            if (LinkRepository.IsProcessing(currentPage) && currentPage.Url != BaseUrl) 
-                    return true;
-
-            currentPage.WorkState = WorkState.Processing;
-
-            var responseMessage = await GetResponseMessage(currentPage);
-            lock (LinkRepository)
-            {
-
-                currentPage.Url = LinkFilter.ToSingleStyle(currentPage.Url);
-                LinkRepository.AddAsync(currentPage).Wait();
-            }
-
-            var pageUrlList = (await RequestService.ToLinkList(responseMessage, currentPage)).ToList();
-
-            pageUrlList.RemoveAll(p => LinkFilter.IsInDomain(p.Url, this.BaseUrl) == false);
-            pageUrlList.RemoveAll(p => LinkFilter.IsFileLink(p.Url));
-
-            foreach (var link in pageUrlList)
-            {
-                AddState addState;
-
-                link.Url = LinkFilter.ToSingleStyle(link.Url);
-                lock (LinkRepository)  
-                        addState = LinkRepository.AddAsync(link).Result;
-
-                if (addState != AddState.ExistNormal)
+                int currentPos = 0;
+                while (currentPos < message.Length) //find urls in all message between currentTags
                 {
-                    await AddLinksFromViewAsync(link);
+                    int indexOfStartTag = message.IndexOf(currentTags.Key, currentPos);
+
+                    if (indexOfStartTag < 0) //not found start tag
+                            break;
+
+                    int indexOfEndTag = message.IndexOf(currentTags.Value, indexOfStartTag + currentTags.Key.Length);
+                    if (indexOfEndTag == -1) //not found end tag
+                        indexOfEndTag = message.Length - 1;
+
+                    urls.Add(message[(indexOfStartTag + currentTags.Key.Length)..indexOfEndTag]);
+                    currentPos = indexOfEndTag + currentTags.Value.Length;
                 }
             }
-
-            currentPage.WorkState = WorkState.Complete;
-            return true;
+            return urls;
         }
 
-        /// <summary>
-        /// Send request to sitemap url, find links and add it to repository
-        /// </summary>
-        public async Task<bool> AddLinksFromSitemapAsync()
-        {
-            if (BaseUrl.Length == 0) return false;
-
-            var sitemapLink = new Link(GetSitemapUrl(), LocationUrl.InSiteMap);
-            var responseMessage = await GetResponseMessage(sitemapLink);
-            var linkList = await RequestService.ToLinkList(responseMessage, sitemapLink);
-
-            foreach (var link in linkList)
+        public IEnumerable<Link> ResponseToLinkList(HttpResponseMessage responseMessage, Link relativelyFrom, Dictionary<string, string> linkMarkers)
+        { 
+            if (responseMessage.IsSuccessStatusCode)
             {
-                if (LinkFilter.IsInDomain(link.Url, BaseUrl) == false) 
-                        continue;
+                string message = responseMessage.Content.ReadAsStringAsync().Result;
+                var urls = CutUrlBetweenTags(message, linkMarkers).ToList();
+                var links = ToAbsoluteUrlList(urls, relativelyFrom.Url).ToList();
 
-                link.Url = LinkFilter.ToSingleStyle(link.Url);
-
-                AddState addState;
-                lock (LinkRepository)
-                    addState = LinkRepository.AddAsync(link).Result;
-
-                if (addState == AddState.AddAsNew)
-                {//needed for setup time request
-                    await GetResponseMessage(link);
-                }
+                return links.Select(p => new Link(p));
             }
 
-            return true;
+            return new List<Link>(); // responseMessage not sucessStatusCode
         }
 
         /// <summary>
-        /// Return responseMessage on request and setup time input variable
+        /// Default delimiters is 
+        /// <loc></loc> for sitemap.xml
+        /// href src for view
         /// </summary>
-        /// <param name="link"></param>
+        /// <param name="location"></param>
         /// <returns></returns>
-        private async Task<HttpResponseMessage> GetResponseMessage(Link link)
+        public static Dictionary<string, string> GetDefaultUrlTags(LocationUrl location)
         {
-            var startTime = Stopwatch.StartNew();
-            var responseMessage = await RequestService.SendRequestAsync(link.Url);
-            startTime.Stop();
-            link.TimeDuration = (int)startTime.ElapsedMilliseconds;
-            return responseMessage;
+            Dictionary<string, string> defaultDelimiters = new Dictionary<string, string>();
+
+            if (location == LocationUrl.InSiteMap)
+            {
+                defaultDelimiters.Add("<loc>", "</loc>");
+            }
+            else
+            {
+                defaultDelimiters.Add("href=\"", "\"");
+                defaultDelimiters.Add("href='", "'");
+                defaultDelimiters.Add("src=\"", "\"");
+                defaultDelimiters.Add("src='", "'");
+            }
+            return defaultDelimiters;
         }
 
-        /// <summary>
-        /// Find sitemap.xml file in this domain
-        /// </summary>
-        private string GetSitemapUrl()
+        public IEnumerable<string> ToAbsoluteUrlList(IEnumerable<string> input, string relativelyFrom)
         {
-            return BaseUrl + "/sitemap.xml";
-        }
+            List<string> ablosuteUrl = new List<string>();
+            var Protocol = relativelyFrom.Substring(0, relativelyFrom.IndexOf("//") + 2);
+            foreach (string item in input)
+            {
+                //absolute path
+                if (item.StartsWith("http://") || item.StartsWith("https://"))
+                {
+                    ablosuteUrl.Add(item);
+                    continue;
+                }
+                //example: item == //example.com/ => add https://www.example.com/
+                if (item.StartsWith("//") && !item.Contains(Protocol))
+                {
+                    ablosuteUrl.Add(Protocol + item[2..]);
+                    continue;
+                }
 
+                if (item == "/")
+                {
+                    ablosuteUrl.Add(BaseUrl);
+                    continue;
+                }
+                //example revativelyFrom == https://www.example.com/something/ and item == /something => https://www.example.com/something
+                if (relativelyFrom.EndsWith(item))
+                {
+                    var absolute = relativelyFrom.Substring(0, relativelyFrom.IndexOf(item)) + item;
+                    ablosuteUrl.Add(absolute);
+                    continue;
+                }
+                //example item == /books => add BaseUrl/books
+                if (item.StartsWith("/"))
+                {
+                    ablosuteUrl.Add(BaseUrl + item[1..]);
+                    continue;
+                }
+                //example item == ./books/firstbook.html and relativelyFrom == https://www.example.com/library/magazine => https://www.example.com/library/books/firstbook.html
+                if (item.StartsWith("./"))
+                {
+                    string absolute = relativelyFrom;
+                    string relative = item;
+                    while (relative.StartsWith("./"))
+                    {
+                        absolute = absolute.Substring(0, relativelyFrom.LastIndexOf("/"));
+                        relative = relative[2..];
+                    }
+                    ablosuteUrl.Add(absolute + relative);
+                    continue;
+                }
+
+            }
+            return ablosuteUrl;
+        }
     }
 }

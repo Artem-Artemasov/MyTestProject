@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKAD", "UKAD\UKAD.csproj", "{15ED8276-BF06-4C92-BEFA-FB60856969E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKAD.Logic", "UKAD\UKAD.Logic.csproj", "{15ED8276-BF06-4C92-BEFA-FB60856969E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UKAD.Tests", "UKAD.Tests\UKAD.Tests.csproj", "{4D6FE5AC-F144-482B-96B0-FDF8F369940E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UKAD.Tests", "UKAD.Tests\UKAD.Tests.csproj", "{4D6FE5AC-F144-482B-96B0-FDF8F369940E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

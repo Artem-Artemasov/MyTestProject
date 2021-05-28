@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using UKAD.Models;
-using UKAD.Interfaces.Repository;
+using UKAD.Logic.Models;
+using UKAD.Logic.Interfaces.Repository;
 
-namespace UKAD.Interfaces.View
+namespace UKAD.Logic.Interfaces.View
 {
     public interface ILinkView
     {

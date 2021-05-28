@@ -1,35 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UKAD.Enums;
-
-namespace UKAD.Models
+﻿namespace UKAD.Logic.Models
 {
     public class Link
     {
         public string Url { get; set; }
-        public LocationUrl LocationUrl { get; set; }
-        public int TimeDuration { get; set; }
-        public WorkState WorkState { get; set; }
+        public int TimeResponse { get; set; }
+        public bool IsParsed { get; set; }
 
-        public Link(string url,LocationUrl location,int timeDuration = -1)
+        public Link(string url,int timeDuration = -1,bool isParsed = false)
         {
             Url = url;
-            LocationUrl = location;
-            TimeDuration = timeDuration;
-            WorkState = WorkState.Create;
-        }
-
-        public Link(string url, LocationUrl location, WorkState workState, int timeDuration):this(url,location,timeDuration)
-        {
-            WorkState = workState;
+            TimeResponse = timeDuration;
+            IsParsed = isParsed;
         }
 
         public static Link Clone(Link link)
         {
-            return new Link(link.Url, link.LocationUrl, link.WorkState, link.TimeDuration);
+            return new Link(link.Url, link.TimeResponse,link.IsParsed);
         }
+
     }
 }

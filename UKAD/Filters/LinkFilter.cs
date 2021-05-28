@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using UKAD.Interfaces;
 
-namespace UKAD.Filters
+namespace UKAD.Logic.Filters
 {
     public class LinkFilter
     { 
@@ -34,7 +33,8 @@ namespace UKAD.Filters
 
             foreach(var item in expansions)
             {
-                if (link.IndexOf(item) != -1) return true ;
+                if (link.IndexOf(item) != -1) 
+                        return true ;
             }
 
             return false;
@@ -43,10 +43,9 @@ namespace UKAD.Filters
         public virtual bool IsCorrectLink(string link)
         {
             var regex = new Regex(@"(?<1>(ht)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*))");
-
             int matchCount = regex.Matches(link).Count;
-
-            if (matchCount != 0 && !link.Contains("@")) return true;
+            if (matchCount != 0 && !link.Contains("@"))
+                    return true;
 
             return false;
         }
@@ -64,7 +63,8 @@ namespace UKAD.Filters
                 link = link.Insert(httpIndex, "www.");
             }
 
-            if (link.EndsWith("/") == false) link += "/";
+            if (link.EndsWith("/") == false) 
+                    link += "/";
 
             return link;
         }
@@ -73,10 +73,10 @@ namespace UKAD.Filters
         {
             string domainWhOutWWW = "";
             if (domain.Contains("www."))
-            {
-                domainWhOutWWW = domain.Replace("www.","");
-            }
-            if (link.Contains(domain) || link.Contains(domainWhOutWWW)) return true;
+                    domainWhOutWWW = domain.Replace("www.","");
+
+            if (link.Contains(domain) || link.Contains(domainWhOutWWW)) 
+                    return true;
 
             return false;
         }
