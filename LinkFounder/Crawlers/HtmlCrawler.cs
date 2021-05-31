@@ -3,10 +3,11 @@ using System.Linq;
 using LinkFounder.Logic.Validators;
 using LinkFounder.Logic.Models;
 using LinkFounder.Logic.Services;
+using LinkFounder.Logic.Interfaces;
 
 namespace LinkFounder.Logic.Crawlers
 {
-    public class HtmlCrawler
+    public class HtmlCrawler : ICrawler
     {
         private readonly LinkParser LinkParser;
         private readonly LinkValidator LinkValidator;
