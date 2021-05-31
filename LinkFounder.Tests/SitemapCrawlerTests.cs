@@ -35,7 +35,7 @@ namespace LinkFounder.Logic.Tests
         }
 
         [Test]
-        public void SitemapCrawler_EmptyString__ReturnEmptyList()
+        public void GetLinks_EmptyString__ReturnEmptyList()
         {
             //Arrange
             mockLinkValidator.Setup(p => p.IsCorrectLink(""))
@@ -64,7 +64,7 @@ namespace LinkFounder.Logic.Tests
 
 
         [Test]
-        public void SitemapCrawler_SiteWithHaveCorrectSitemap_ReturnLinksList()
+        public void GetLinks_SiteWithHaveCorrectSitemap_ReturnLinksList()
         {
             //Arrange
             mockRequestService.Setup(p => p.DownloadPage(new Link("https://example.com/sitemap.xml",0)))
@@ -92,7 +92,7 @@ namespace LinkFounder.Logic.Tests
             });
         }
         [Test]
-        public void SitemapCrawler_SiteWithNotHaveSitemap_ReturnEmptyList()
+        public void GetLinks_SiteWithNotHaveSitemap_ReturnEmptyList()
         {
             //Arrange
             mockLinkParser.Setup(p => p.Parse(It.IsAny<string>()))

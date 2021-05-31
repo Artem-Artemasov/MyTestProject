@@ -33,6 +33,11 @@ namespace LinkFounder.Logic.Crawlers
                 baseUrl += '/';
             }
 
+            if (RequestService.SendRequest(baseUrl,out int time).IsSuccessStatusCode == false)
+            {
+                return storage;
+            }
+
             storage.Add(new Link(baseUrl));
             storage = AnalyzeLink(storage.First(), storage).ToList();
 
