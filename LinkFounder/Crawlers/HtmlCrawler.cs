@@ -41,7 +41,7 @@ namespace LinkFounder.Logic.Crawlers
             storage.Add(new Link(baseUrl));
             storage = AnalyzeLink(storage.First(), storage).ToList();
 
-            return storage;
+            return storage.OrderBy(p=>p.TimeResponse);
         }
 
         // TODO: Splite a
@@ -80,7 +80,7 @@ namespace LinkFounder.Logic.Crawlers
                 if (LinkValidator.IsFileLink(link.Url))
                     continue;
 
-                if (LinkValidator.IsInDomain(link.Url, domain) == false)
+                if (LinkValidator.IsInCurrentSite(link.Url, domain) == false)
                     continue;
 
                 validLinks.Add(link);

@@ -41,7 +41,7 @@ namespace LinkFounder.Logic.Crawlers
 
             storage = LinkConverter.RelativeToAbsolute(parsedUrls, baseUrl)
                                   .Select(p => new Link(p))
-                                  .Where(p => LinkValidator.IsInDomain(p.Url, baseUrl))
+                                  .Where(p => LinkValidator.IsInCurrentSite(p.Url, baseUrl))
                                   .ToList();
 
             foreach (var link in storage)
@@ -50,7 +50,7 @@ namespace LinkFounder.Logic.Crawlers
                 link.TimeResponse = timeResponse;
             }
 
-            return storage;
+            return storage.OrderBy(p=>p.TimeResponse);
         }
 
         public virtual string GetSitemapUrl(string baseUrl)

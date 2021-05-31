@@ -34,7 +34,7 @@ namespace LinkFounder.Logic.Tests
             mockLinkValidator.Setup(p => p.IsCorrectLink(It.IsAny<string>()))
                           .Returns(true);
 
-            mockLinkValidator.Setup(p => p.IsInDomain(It.IsAny<string>(), It.IsAny<string>()))
+            mockLinkValidator.Setup(p => p.IsInCurrentSite(It.IsAny<string>(), It.IsAny<string>()))
                              .Returns(true);
 
             mockLinkValidator.Setup(p => p.IsFileLink(It.IsAny<string>()))

@@ -44,12 +44,37 @@ namespace LinkFounder.Logic.Validators
 
         public virtual bool IsCorrectLink(string link)
         {
-            if (link.IndexOf("https://") != -1 && link.IndexOf("http://") != -1)
+            int indexProtocol = link.IndexOf("https://");
+            string protocol = "https://";
+
+            if (indexProtocol == -1)
+            {
+                indexProtocol = link.IndexOf("http://");
+                protocol = "http://";
+            }
+            
+            if ( indexProtocol == -1 || link.Length <= protocol.Length) // not have protocol
             {
                 return false;
             }
 
-            if (link.IndexOf(".") == -1)
+            if (link.IndexOf(".") == -1) // not have .
+            {
+                return false;
+            }
+            
+            if (link.Length <= indexProtocol + protocol.Length + 1 || Char.IsLetter(link[indexProtocol + protocol.Length + 1]) == false)
+            {
+                return false;
+            }
+
+            int indexOfwww = link.IndexOf("www.");
+            if (link.Length <=  indexOfwww+ 4)
+            {
+                return false;
+            }
+
+            if (indexOfwww != -1 && link.IndexOf('.', indexOfwww + 4) == -1)
             {
                 return false;
             }
@@ -57,9 +82,9 @@ namespace LinkFounder.Logic.Validators
             return true;
         }
 
-        public virtual bool IsInDomain(string link, string domain)
+        public virtual bool IsInCurrentSite(string link, string baseUrl)
         {
-            if (link.Contains(domain) == false)
+            if (link.Contains(baseUrl) == false)
             {
                 return false;
             }
