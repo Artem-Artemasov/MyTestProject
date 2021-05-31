@@ -8,31 +8,40 @@ namespace LinkFounder.Logic.Crawlers
 {
     public class SitemapCrawler
     {
-        private readonly RequestService RequestService;
         private readonly LinkParser LinkParser;
-        private readonly LinkValidator LinkFilter;
+        private readonly LinkValidator LinkValidator;
+        private readonly RequestService RequestService;
+        private readonly LinkConverter LinkConverter;
 
-        public SitemapCrawler(RequestService requestService, LinkParser linkProcessing, LinkValidator linkFilter)
+        public SitemapCrawler(RequestService requestService, LinkConverter linkConverter, LinkParser linkParser, LinkValidator linkValidator)
         {
+            LinkParser = linkParser;
+            LinkValidator = linkValidator;
             RequestService = requestService;
-            LinkProcessing = linkProcessing;
-            LinkFilter = linkFilter;
+            LinkConverter = linkConverter;
         }
 
         public virtual IEnumerable<Link> GetLinks(string baseUrl)
         {
             var storage = new List<Link>();
 
-            if (LinkFilter.IsCorrectLink(baseUrl) == false)
+            if (LinkValidator.IsCorrectLink(baseUrl) == false)
                 return storage;
 
-            var sitemapLink = new Link(GetSitemapUrl(baseUrl));
-            var responseMessage = RequestService.SendRequest(sitemapLink.Url, out int timeOfResponse);
-            sitemapLink.TimeResponse = timeOfResponse;
+            if (baseUrl.EndsWith('/') == false)
+            {
+                baseUrl += '/';
+            }
 
-            var parsedUrls = LinkParser.ResponseMsgToUrlList(responseMessage);
-            storage = LinkParser.RelativeToAbsolute(baseUrl, parsedUrls, baseUrl)
+            var sitemapLink = new Link(GetSitemapUrl(baseUrl));
+
+            var responseMessage = RequestService.DownloadPage(sitemapLink);
+
+            var parsedUrls = LinkParser.Parse(responseMessage);
+
+            storage = LinkConverter.RelativeToAbsolute(parsedUrls, baseUrl)
                                   .Select(p => new Link(p))
+                                  .Where(p => LinkValidator.IsInDomain(p.Url, baseUrl))
                                   .ToList();
 
             foreach (var link in storage)
@@ -46,7 +55,7 @@ namespace LinkFounder.Logic.Crawlers
 
         public virtual string GetSitemapUrl(string baseUrl)
         {
-            return baseUrl + "/sitemap.xml";
+            return baseUrl + "sitemap.xml";
         }
     }
 }

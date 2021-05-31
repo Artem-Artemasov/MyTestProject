@@ -8,10 +8,19 @@ namespace LinkFounder.Logic.Services
 {
     public class LinkConverter
     {
-        public virtual IEnumerable<string> RelativeToAbsolute(string baseUrl, IEnumerable<string> input, string relativelyFrom)
+        public virtual IEnumerable<string> RelativeToAbsolute(IEnumerable<string> input, string relativelyFrom)
         {
             List<string> ablosuteUrl = new List<string>();
+
+            if (relativelyFrom.EndsWith('/') == false)
+            {
+                relativelyFrom += '/';
+            }
+
             var Protocol = relativelyFrom.Substring(0, relativelyFrom.IndexOf("//") + 2);
+
+            var baseUrl = CutBaseUrl(relativelyFrom);
+
             foreach (string item in input)
             {
                 //absolute path
@@ -50,17 +59,36 @@ namespace LinkFounder.Logic.Services
                 {
                     string absolute = relativelyFrom;
                     string relative = item;
+
+                    absolute = absolute[0..(absolute.LastIndexOf("/"))];
+
                     while (relative.StartsWith("./"))
                     {
-                        absolute = absolute.Substring(0, relativelyFrom.LastIndexOf("/"));
                         relative = relative[2..];
+                        absolute = absolute[0..(absolute.LastIndexOf("/"))]; 
                     }
-                    ablosuteUrl.Add(absolute + relative);
+
+
+                    ablosuteUrl.Add(absolute + '/' + relative);
                     continue;
                 }
 
             }
             return ablosuteUrl;
+        }
+
+        private string CutBaseUrl(string relatively)
+        {
+            if (relatively == "")
+            {
+                return "";
+            }
+
+            var Protocol = relatively.Substring(0, relatively.IndexOf("//") + 2);
+
+            int indexEndDomain = relatively.IndexOf('/', relatively.IndexOf(Protocol) + Protocol.Length);
+
+            return relatively[0..indexEndDomain] + '/';
         }
     }
 }

@@ -27,7 +27,7 @@ namespace LinkFounder.Logic.Services
                     int indexOfEndTag = message.IndexOf(currentTags.Value, indexOfStartTag + currentTags.Key.Length);
                     if (indexOfEndTag == -1) //not found end tag
                     {
-                        indexOfEndTag = message.Length - 1;
+                        indexOfEndTag = message.IndexOf(" ",indexOfStartTag);
                     }
 
                     urls.Add(message[(indexOfStartTag + currentTags.Key.Length)..indexOfEndTag]);

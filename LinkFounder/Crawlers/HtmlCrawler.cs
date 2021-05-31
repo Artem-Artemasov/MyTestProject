@@ -13,7 +13,7 @@ namespace LinkFounder.Logic.Crawlers
         private readonly RequestService RequestService;
         private readonly LinkConverter LinkConverter;
 
-        public HtmlCrawler(RequestService requestService,LinkConverter linkConverter, LinkParser linkParser, LinkValidator linkValidator)
+        public HtmlCrawler(RequestService requestService, LinkConverter linkConverter, LinkParser linkParser, LinkValidator linkValidator)
         {
             LinkParser = linkParser;
             LinkValidator = linkValidator;
@@ -28,24 +28,29 @@ namespace LinkFounder.Logic.Crawlers
             if (LinkValidator.IsCorrectLink(baseUrl) == false)
                 return storage;
 
+            if (baseUrl.EndsWith('/') == false)
+            {
+                baseUrl += '/';
+            }
+
             storage.Add(new Link(baseUrl));
-            storage = ProcessLink(baseUrl, storage.First(), storage).ToList();
+            storage = AnalyzeLink(storage.First(), storage).ToList();
 
             return storage;
         }
 
         // TODO: Splite a
-        private IEnumerable<Link> ProcessLink(string domain, Link currentPage, List<Link> existingLinks)
+        private IEnumerable<Link> AnalyzeLink(Link currentPage, List<Link> existingLinks)
         {
             var page = RequestService.DownloadPage(currentPage);
 
             var parsedUrls = LinkParser.Parse(page);
 
-            var foundedLinks = LinkConverter.RelativeToAbsolute(domain, parsedUrls, currentPage.Url)
+            var foundedLinks = LinkConverter.RelativeToAbsolute(parsedUrls, currentPage.Url)
                                .Select(p => new Link(p))
                                .ToList();
 
-            foundedLinks =  NormalizeLink(foundedLinks, existingLinks.FirstOrDefault().Url)
+            foundedLinks = NormalizeLink(foundedLinks, existingLinks.FirstOrDefault().Url)
                            .Except(existingLinks, (x, y) => x.Url == y.Url)
                            .ToList();
 
@@ -53,7 +58,7 @@ namespace LinkFounder.Logic.Crawlers
 
             foreach (var link in foundedLinks)
             {
-                ProcessLink(domain, link, existingLinks);
+                AnalyzeLink(link, existingLinks);
             }
 
             return existingLinks;

@@ -33,7 +33,7 @@ namespace LinkFounder.Logic.Validators
 
             foreach (var item in extensions)
             {
-                if (link.IndexOf(item) != -1)
+                if (link.Contains(item))
                 {
                     return true;
                 }  
@@ -44,12 +44,12 @@ namespace LinkFounder.Logic.Validators
 
         public virtual bool IsCorrectLink(string link)
         {
-            if (link.Contains("https://") == false || link.Contains("http://") == false)
+            if (link.IndexOf("https://") != -1 && link.IndexOf("http://") != -1)
             {
                 return false;
             }
 
-            if (link.Contains(".") == false)
+            if (link.IndexOf(".") == -1)
             {
                 return false;
             }
@@ -60,8 +60,9 @@ namespace LinkFounder.Logic.Validators
         public virtual bool IsInDomain(string link, string domain)
         {
             if (link.Contains(domain) == false)
+            {
                 return false;
-
+            }
             return true;
         }
     }
