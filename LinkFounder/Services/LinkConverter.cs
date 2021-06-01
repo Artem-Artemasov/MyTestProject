@@ -18,7 +18,6 @@ namespace LinkFounder.Logic.Services
             }
 
             var Protocol = relativelyFrom.Substring(0, relativelyFrom.IndexOf("//") + 2);
-
             var baseUrl = CutBaseUrl(relativelyFrom);
 
             foreach (string item in input)
@@ -61,18 +60,15 @@ namespace LinkFounder.Logic.Services
                     string relative = item;
 
                     absolute = absolute[0..(absolute.LastIndexOf("/"))];
-
                     while (relative.StartsWith("./"))
                     {
                         relative = relative[2..];
                         absolute = absolute[0..(absolute.LastIndexOf("/"))]; 
                     }
 
-
                     ablosuteUrl.Add(absolute + '/' + relative);
                     continue;
                 }
-
             }
             return ablosuteUrl;
         }
