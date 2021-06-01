@@ -19,7 +19,7 @@ namespace LinkFounder.Logic.Crawlers
             _SitemapCrawler = sitemapCrawler;
         }
 
-        public virtual IEnumerable<Link> GetAllLinks(string baseUrl)
+        public virtual IEnumerable<Link> GetLinks(string baseUrl)
         {
             var htmlLinks = _HtmlCrawler.GetLinks(baseUrl);
             var sitemapLinks = _SitemapCrawler.GetLinks(baseUrl);
