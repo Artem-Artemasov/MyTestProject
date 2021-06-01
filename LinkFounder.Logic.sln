@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkFounder.Logic", "LinkFo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkFounder.Logic.Tests", "LinkFounder.Tests\LinkFounder.Logic.Tests.csproj", "{58AE5D72-1E8F-425F-96A6-82D2E6AB8DEF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkFounder.ConsoleView", "LinkFounderConsoleView\LinkFounder.ConsoleView.csproj", "{B01B5C66-9809-4882-A7DD-984B2A3636C2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkFounder.ConsoleView.Tests", "LinkFounderConsoleView.Tests\LinkFounder.ConsoleView.Tests.csproj", "{97986E37-CAFA-4A87-8748-393DBB1759E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{58AE5D72-1E8F-425F-96A6-82D2E6AB8DEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58AE5D72-1E8F-425F-96A6-82D2E6AB8DEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58AE5D72-1E8F-425F-96A6-82D2E6AB8DEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B01B5C66-9809-4882-A7DD-984B2A3636C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B01B5C66-9809-4882-A7DD-984B2A3636C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B01B5C66-9809-4882-A7DD-984B2A3636C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B01B5C66-9809-4882-A7DD-984B2A3636C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97986E37-CAFA-4A87-8748-393DBB1759E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97986E37-CAFA-4A87-8748-393DBB1759E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97986E37-CAFA-4A87-8748-393DBB1759E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97986E37-CAFA-4A87-8748-393DBB1759E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
