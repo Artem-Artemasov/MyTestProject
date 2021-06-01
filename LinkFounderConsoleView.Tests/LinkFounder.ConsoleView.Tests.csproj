@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UkadConsoleView\LinkFounder.ConsoleView.csproj" />
+    <ProjectReference Include="..\LinkFounderConsoleView\LinkFounder.ConsoleView.csproj" />
   </ItemGroup>
 
 </Project>

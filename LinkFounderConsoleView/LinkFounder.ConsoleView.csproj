@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\LinkFounder.Logic\LinkFounder\LinkFounder.Logic.csproj" />
+    <ProjectReference Include="..\LinkFounder\LinkFounder.Logic.csproj" />
   </ItemGroup>
 
 </Project>
