@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkFounder.ConsoleView", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkFounder.ConsoleView.Tests", "LinkFounderConsoleView.Tests\LinkFounder.ConsoleView.Tests.csproj", "{97986E37-CAFA-4A87-8748-393DBB1759E3}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkFounder.DbSaver", "LinkFounder.DbSaver\LinkFounder.DbSaver.csproj", "{D00E6C6D-AFDD-4281-8160-679C0BA97352}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{97986E37-CAFA-4A87-8748-393DBB1759E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97986E37-CAFA-4A87-8748-393DBB1759E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97986E37-CAFA-4A87-8748-393DBB1759E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D00E6C6D-AFDD-4281-8160-679C0BA97352}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D00E6C6D-AFDD-4281-8160-679C0BA97352}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D00E6C6D-AFDD-4281-8160-679C0BA97352}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D00E6C6D-AFDD-4281-8160-679C0BA97352}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
