@@ -38,7 +38,7 @@ namespace LinkFounder.Logic.Validators
                     return true;
                 }  
             }
-
+            
             return false;
         }
 
@@ -53,7 +53,7 @@ namespace LinkFounder.Logic.Validators
                 protocol = "http://";
             }
             
-            if ( indexProtocol == -1 || link.Length <= protocol.Length) // not have protocol
+            if ( indexProtocol == -1 || link.Length <= protocol.Length) // not have protocol or link == protocol
             {
                 return false;
             }
@@ -84,11 +84,7 @@ namespace LinkFounder.Logic.Validators
 
         public virtual bool IsInCurrentSite(string link, string baseUrl)
         {
-            if (link.Contains(baseUrl) == false)
-            {
-                return false;
-            }
-            return true;
+            return link.Contains(baseUrl);
         }
     }
 }

@@ -9,24 +9,24 @@ namespace LinkFounder.Logic.Crawlers
 {
     public class HtmlCrawler : ICrawler
     {
-        private readonly LinkParser _LinkParser;
-        private readonly LinkValidator _LinkValidator;
-        private readonly RequestService _RequestService;
-        private readonly LinkConverter _LinkConverter;
+        private readonly LinkParser _linkParser;
+        private readonly LinkValidator _linkValidator;
+        private readonly RequestService _requestService;
+        private readonly LinkConverter _linkConverter;
 
         public HtmlCrawler(RequestService requestService, LinkConverter linkConverter, LinkParser linkParser, LinkValidator linkValidator)
         {
-            _LinkParser = linkParser;
-            _LinkValidator = linkValidator;
-            _RequestService = requestService;
-            _LinkConverter = linkConverter;
+            _linkParser = linkParser;
+            _linkValidator = linkValidator;
+            _requestService = requestService;
+            _linkConverter = linkConverter;
         }
 
         public virtual IEnumerable<Link> GetLinks(string baseUrl)
         {
             var storage = new List<Link>();
 
-            if (_LinkValidator.IsCorrectLink(baseUrl) == false)
+            if (_linkValidator.IsCorrectLink(baseUrl) == false)
                 return storage;
 
             if (baseUrl.EndsWith('/') == false)
@@ -34,7 +34,7 @@ namespace LinkFounder.Logic.Crawlers
                 baseUrl += '/';
             }
 
-            if (_RequestService.SendRequest(baseUrl,out int time).IsSuccessStatusCode == false)
+            if (_requestService.SendRequest(baseUrl,out int time).IsSuccessStatusCode == false)
             {
                 return storage;
             }
@@ -45,14 +45,13 @@ namespace LinkFounder.Logic.Crawlers
             return storage.OrderBy(p=>p.TimeResponse);
         }
 
-        // TODO: Splite a
         private IEnumerable<Link> AnalyzeLink(Link currentPage, List<Link> existingLinks)
         {
-            var page = _RequestService.DownloadPage(currentPage);
+            var page = _requestService.DownloadPage(currentPage);
 
-            var parsedUrls = _LinkParser.Parse(page);
+            var parsedUrls = _linkParser.Parse(page);
 
-            var foundedLinks = _LinkConverter.RelativeToAbsolute(parsedUrls, currentPage.Url)
+            var foundedLinks = _linkConverter.RelativeToAbsolute(parsedUrls, currentPage.Url)
                                .Select(p => new Link(p))
                                .ToList();
 
@@ -78,10 +77,10 @@ namespace LinkFounder.Logic.Crawlers
                 if (validLinks.FirstOrDefault(p => p.Url == link.Url) != null)
                     continue;
 
-                if (_LinkValidator.IsFileLink(link.Url))
+                if (_linkValidator.IsFileLink(link.Url))
                     continue;
 
-                if (_LinkValidator.IsInCurrentSite(link.Url, domain) == false)
+                if (_linkValidator.IsInCurrentSite(link.Url, domain) == false)
                     continue;
 
                 validLinks.Add(link);

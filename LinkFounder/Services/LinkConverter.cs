@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace LinkFounder.Logic.Services
 {
@@ -17,7 +13,7 @@ namespace LinkFounder.Logic.Services
                 relativelyFrom += '/';
             }
 
-            var Protocol = relativelyFrom.Substring(0, relativelyFrom.IndexOf("//") + 2);
+            var protocol = relativelyFrom.Substring(0, relativelyFrom.IndexOf("//") + 2);
             var baseUrl = CutBaseUrl(relativelyFrom);
 
             foreach (string item in input)
@@ -29,9 +25,9 @@ namespace LinkFounder.Logic.Services
                     continue;
                 }
                 //example: item == //example.com/ => add https://www.example.com/
-                if (item.StartsWith("//") && !item.Contains(Protocol))
+                if (item.StartsWith("//") && !item.Contains(protocol))
                 {
-                    ablosuteUrl.Add(Protocol + item[2..]);
+                    ablosuteUrl.Add(protocol + item[2..]);
                     continue;
                 }
 

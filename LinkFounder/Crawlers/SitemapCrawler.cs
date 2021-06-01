@@ -9,24 +9,24 @@ namespace LinkFounder.Logic.Crawlers
 {
     public class SitemapCrawler : ICrawler
     {
-        private readonly LinkParser _LinkParser;
-        private readonly LinkValidator _LinkValidator;
-        private readonly RequestService _RequestService;
-        private readonly LinkConverter _LinkConverter;
+        private readonly LinkParser _linkParser;
+        private readonly LinkValidator _linkValidator;
+        private readonly RequestService _requestService;
+        private readonly LinkConverter _linkConverter;
 
         public SitemapCrawler(RequestService requestService, LinkConverter linkConverter, LinkParser linkParser, LinkValidator linkValidator)
         {
-            _LinkParser = linkParser;
-            _LinkValidator = linkValidator;
-            _RequestService = requestService;
-            _LinkConverter = linkConverter;
+            _linkParser = linkParser;
+            _linkValidator = linkValidator;
+            _requestService = requestService;
+            _linkConverter = linkConverter;
         }
 
         public virtual IEnumerable<Link> GetLinks(string baseUrl)
         {
             var storage = new List<Link>();
 
-            if (_LinkValidator.IsCorrectLink(baseUrl) == false)
+            if (_linkValidator.IsCorrectLink(baseUrl) == false)
             {
                 return storage;
             }
@@ -38,13 +38,13 @@ namespace LinkFounder.Logic.Crawlers
 
             var sitemapLink = new Link(GetSitemapUrl(baseUrl));
 
-            var responseMessage = _RequestService.DownloadPage(sitemapLink);
+            var responseMessage = _requestService.DownloadPage(sitemapLink);
 
-            var parsedUrls = _LinkParser.Parse(responseMessage);
+            var parsedUrls = _linkParser.Parse(responseMessage);
 
-            storage = _LinkConverter.RelativeToAbsolute(parsedUrls, baseUrl)
+            storage = _linkConverter.RelativeToAbsolute(parsedUrls, baseUrl)
                                   .Select(p => new Link(p))
-                                  .Where(p => _LinkValidator.IsInCurrentSite(p.Url, baseUrl))
+                                  .Where(p => _linkValidator.IsInCurrentSite(p.Url, baseUrl))
                                   .ToList();
 
             storage = SetupTimeResponse(storage).ToList();
@@ -56,7 +56,7 @@ namespace LinkFounder.Logic.Crawlers
         {
             foreach (var link in links)
             {
-                _RequestService.SendRequest(link.Url, out int timeResponse);
+                _requestService.SendRequest(link.Url, out int timeResponse);
                 link.TimeResponse = timeResponse;
             }
             return links;
