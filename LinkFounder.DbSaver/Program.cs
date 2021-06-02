@@ -2,11 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Configuration;
-using System;
 using System.Threading.Tasks;
-using LinkFounder.DbSaver.Models;
-using LinkFounder.ConsoleView;
+
 
 namespace LinkFounder.DbSaver
 {

@@ -1,11 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LinkFounder.DbSaver.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 
-namespace LinkFounder.DbSaver.Models
+namespace LinkFounder.DbSaver
 {
     public class LinkFounderDbContext : DbContext, IEfRepositoryDbContext
     {
+        public DbSet<Test> Tests { get; set; }
+        public DbSet<Result> Results { get; set; }
+
         public LinkFounderDbContext(DbContextOptions options) : base(options)
         {
             Database.Migrate();
@@ -16,8 +20,5 @@ namespace LinkFounder.DbSaver.Models
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(LinkFounderDbContext).Assembly);
             base.OnModelCreating(modelBuilder);
         }
-
-        public DbSet<Test> Tests { get; set; }
-        public DbSet<Result> Results { get; set; }
     }
 }
