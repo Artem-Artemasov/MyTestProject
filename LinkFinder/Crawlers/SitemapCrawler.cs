@@ -3,11 +3,11 @@ using System.Linq;
 using LinkFinder.Logic.Validators;
 using LinkFinder.Logic.Models;
 using LinkFinder.Logic.Services;
-using LinkFinder.Logic.Interfaces;
+
 
 namespace LinkFinder.Logic.Crawlers
 {
-    public class SitemapCrawler : ICrawler
+    public class SitemapCrawler 
     {
         private readonly LinkParser _linkParser;
         private readonly LinkValidator _linkValidator;
