@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using LinkFounder.DbSaver.Models;
 using System.Data;
@@ -9,6 +7,7 @@ using LinkFounder.Logic.Models;
 
 namespace LinkFounder.DbSaver
 {
+    //using for save test and results
     public class DataSaver
     {
         private readonly IRepository<Test> _testsRepository;
@@ -26,10 +25,9 @@ namespace LinkFounder.DbSaver
             await _testsRepository.AddAsync(test);
             await _testsRepository.SaveChangesAsync();
 
-            var results = links.Select(p => new Result() { Url = p.Url, TimeResponse = p.TimeResponse,TestId = test.Id });
-            
-            _resultRepository.AddRange(results);
+            var results = links.Select(p => new Result() { Url = p.Url, TimeResponse = p.TimeResponse, TestId = test.Id });
 
+            _resultRepository.AddRange(results);
             await _resultRepository.SaveChangesAsync();
         }
     }

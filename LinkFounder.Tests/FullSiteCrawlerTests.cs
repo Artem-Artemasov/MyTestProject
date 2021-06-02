@@ -39,7 +39,7 @@ namespace LinkFounder.Logic.Tests
         }
 
         [Test]
-        public void GetLinks_OverlappedLists_ShouldCorrectConcat()
+        public void GetLinks_OverlappedLists_ShouldCorrectConcatIt()
         {
             //Arrange
             mockHtmlCrawler.Setup(p => p.GetLinks(It.IsAny<string>()))
@@ -48,14 +48,65 @@ namespace LinkFounder.Logic.Tests
                             .Returns(new List<Link> { new Link("https://example.com/"),
                                                       new Link("https://example.com/books")});
             //Act
-            var result = fullSiteCrawler.GetLinks("https://example.com");
+            var result = fullSiteCrawler.GetLinks("https://example.com").ToList();
 
             //Arrange
             Assert.Multiple(() =>
             {
-                Assert.IsNotNull(result.FirstOrDefault(p => p.Url == "https://example.com/"));
-                Assert.IsNotNull(result.FirstOrDefault(p => p.Url == "https://example.com/books"));
+                Assert.IsTrue(result.Exists(p => p.Url == "https://example.com/"));
+                Assert.IsTrue(result.Exists(p => p.Url == "https://example.com/books"));
             });
+        }
+
+        [Test]
+        public void GetLinks_TwiceEnterOneSite_ShouldReturnBufferList()
+        {
+            //Arrange
+            mockHtmlCrawler.SetupSequence(p => p.GetLinks(It.IsAny<string>()))
+                           .Returns(new List<Link> { new Link("https://example.com/", 0) })
+                           .Returns(new List<Link>());
+
+            mockSitemapCrawler.SetupSequence(p => p.GetLinks(It.IsAny<string>()))
+                            .Returns(new List<Link> { new Link("https://example.com/"),
+                                                      new Link("https://example.com/books")})
+                            .Returns(new List<Link>());
+            //Act
+            var result = fullSiteCrawler.GetLinks("https://example.com").ToList();
+
+            //Arrange
+            Assert.Multiple(() =>
+            {
+                Assert.IsTrue(result.Exists(p => p.Url == "https://example.com/"));
+                Assert.IsTrue(result.Exists(p => p.Url == "https://example.com/books"));
+            });
+        }
+
+        [Test]
+        public void GetHtmlLinks_CorrectLink_ShouldReturnList()
+        {
+            //Arrange
+            mockHtmlCrawler.Setup(p => p.GetLinks(It.IsAny<string>()))
+                           .Returns(new List<Link> { new Link("https://example.com/", 0) });
+
+            //Act
+            var result = fullSiteCrawler.GetHtmlLinks("https://example.com").ToList();
+
+            //Arrange
+            Assert.IsTrue(result.Exists(p => p.Url == "https://example.com/"));
+        }
+
+        [Test]
+        public void GeSitemapLinks_CorrectLink_ShouldReturnList()
+        {
+            //Arrange
+            mockSitemapCrawler.Setup(p => p.GetLinks(It.IsAny<string>()))
+                           .Returns(new List<Link> { new Link("https://example.com/", 0) });
+
+            //Act
+            var result = fullSiteCrawler.GetSitemapLinks("https://example.com").ToList();
+
+            //Arrange
+            Assert.IsTrue(result.Exists(p => p.Url == "https://example.com/"));
         }
     }
 }

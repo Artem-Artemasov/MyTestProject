@@ -31,15 +31,7 @@ namespace LinkFounder.Logic.Validators
                 ".ico",
             };
 
-            foreach (var item in extensions)
-            {
-                if (link.Contains(item))
-                {
-                    return true;
-                }  
-            }
-            
-            return false;
+           return extensions.Any(p => link.Contains(p));
         }
 
         public virtual bool IsCorrectLink(string link)

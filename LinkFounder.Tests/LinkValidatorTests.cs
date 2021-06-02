@@ -98,6 +98,14 @@ namespace LinkFounder.Logic.Tests
             Assert.IsTrue(result);
         }
 
+        [Test]
+        public void IsFileLink_FileLink_True()
+        {
+            //Act
+            var result = linkValidator.IsFileLink("https://example.com/books.exe");
 
+            //Assert
+            Assert.IsTrue(result);
+        }
     }
 }

@@ -1,10 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace LinkFounder.DbSaver.Models
 {
@@ -12,6 +8,7 @@ namespace LinkFounder.DbSaver.Models
     {
         public LinkFounderDbContext(DbContextOptions options) : base(options)
         {
+            Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

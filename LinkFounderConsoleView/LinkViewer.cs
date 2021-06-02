@@ -11,7 +11,7 @@ namespace LinkFounder.ConsoleView
         private readonly ResultWritter _consoleWritter;
         private readonly FullSiteCrawler _siteCrawler;
 
-        public LinkViewer(ResultWritter consoleWritter,FullSiteCrawler siteCrawler)
+        public LinkViewer(ResultWritter consoleWritter, FullSiteCrawler siteCrawler)
         {
             _consoleWritter = consoleWritter;
             _siteCrawler = siteCrawler;
@@ -33,17 +33,16 @@ namespace LinkFounder.ConsoleView
                 return;
             }
 
-            PrintAllInformation(htmlLinks, sitemapLinks,allLinks);
-
+            PrintAllInformation(htmlLinks, sitemapLinks, allLinks);
         }
+
         public virtual string ReadUrl()
         {
             _consoleWritter.WriteLine("Please enter a url");
-           return _consoleWritter.ReadLine();
-
+            return _consoleWritter.ReadLine();
         }
 
-        public virtual void PrintAllInformation(IEnumerable<Link> htmlLinks,IEnumerable<Link> sitemapLinks,IEnumerable<Link> allLinks)
+        public virtual void PrintAllInformation(IEnumerable<Link> htmlLinks, IEnumerable<Link> sitemapLinks, IEnumerable<Link> allLinks)
         {
             PrintCaption("\t Urls FOUNDED IN SITEMAP.XML but not founded after crawling a web site");
             PrintList(sitemapLinks.Except(htmlLinks, (x, y) => x.Url == y.Url));
@@ -52,7 +51,6 @@ namespace LinkFounder.ConsoleView
             PrintList(htmlLinks.Except(sitemapLinks, (x, y) => x.Url == y.Url));
 
             PrintWithTime(allLinks.OrderBy(p => p.TimeResponse));
-
             PrintCounts(htmlLinks.Count(), sitemapLinks.Count(), allLinks.Count());
         }
 
@@ -102,8 +100,9 @@ namespace LinkFounder.ConsoleView
             foreach (var link in links)
             {
                 if (link.Url.Length > _consoleWritter.GetOutputWidth() - 25)
+                {
                     link.Url = SliceWithWidth(link.Url, (_consoleWritter.GetOutputWidth() - 25));
-
+                }
                 _consoleWritter.WriteLine("\n|  ");
                 _consoleWritter.Write($"{index}) " + link.Url);
 
@@ -123,13 +122,11 @@ namespace LinkFounder.ConsoleView
             }
 
             int insertSymbols = input.Length / maxWidth;
-
             for (int i = 1; i <= insertSymbols; i++)
+            {
                 input = input.Insert(maxWidth * i, "\n   ");
-
-
+            }
             return input;
         }
-
     }
 }
