@@ -23,7 +23,7 @@ namespace LinkFinder.ConsoleOutput
 
             var inputUrl = linkPrinter.AskUrl();
 
-            linkPrinter.PrintMessageAboutProcessing();
+            linkPrinter.PrintMessageAboutCrawling();
 
             var htmlLinks = htmlCrawler.GetLinks(inputUrl);
             var sitemapLinks = sitemapCrawler.GetLinks(inputUrl);

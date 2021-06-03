@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using LinkFinder.Logic.Crawlers;
 using LinkFinder.Logic.Models;
 using LinkFinder.Logic;
 
@@ -15,12 +14,12 @@ namespace LinkFinder.ConsoleOutput
             _consoleWritter = consoleWritter;
         }
 
-        public virtual void PrintMessageAboutProcessing()
+        public virtual void PrintMessageAboutCrawling()
         {
           _consoleWritter.WriteLine("Program is working, please don't close it.");
         }
 
-        public string AskUrl()
+        public virtual string AskUrl()
         {
             _consoleWritter.WriteLine("Please enter a url");
             return _consoleWritter.ReadLine();

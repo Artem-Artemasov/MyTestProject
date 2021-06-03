@@ -26,12 +26,12 @@ namespace LinkFinder.DbWorker
             var htmlCrawler = new HtmlCrawler(requestService, linkConverter, linkParser, LinkValidator);
             var sitemapCrawler = new SitemapCrawler(requestService, linkConverter, linkParser, LinkValidator);
 
-            var consoleView = new ConsoleWritter();
-            var linkPrinter = new LinkPrinter(consoleView);
+            var consoleWritter = new ConsoleWritter();
+            var linkPrinter = new LinkPrinter(consoleWritter);
 
             var inputUrl = linkPrinter.AskUrl();
 
-            linkPrinter.PrintMessageAboutProcessing();
+            linkPrinter.PrintMessageAboutCrawling();
 
             var htmlLinks = htmlCrawler.GetLinks(inputUrl);
             var sitemapLinks = sitemapCrawler.GetLinks(inputUrl);
