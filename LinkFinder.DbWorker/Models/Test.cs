@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LinkFinder.DbSaver.Models
+namespace LinkFinder.DbWorker.Models
 {
     public class Test
     {

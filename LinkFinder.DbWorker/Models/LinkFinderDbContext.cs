@@ -1,23 +1,23 @@
-﻿using LinkFinder.DbSaver.Models;
+﻿using LinkFinder.DbWorker.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 
-namespace LinkFinder.DbSaver
+namespace LinkFinder.DbWorker
 {
-    public class LinkFounderDbContext : DbContext, IEfRepositoryDbContext
+    public class LinkFinderDbContext : DbContext, IEfRepositoryDbContext
     {
         public DbSet<Test> Tests { get; set; }
         public DbSet<Result> Results { get; set; }
 
-        public LinkFounderDbContext(DbContextOptions options) : base(options)
+        public LinkFinderDbContext(DbContextOptions options) : base(options)
         {
             Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(LinkFounderDbContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(LinkFinderDbContext).Assembly);
             base.OnModelCreating(modelBuilder);
         }
     }

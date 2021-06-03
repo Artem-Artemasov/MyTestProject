@@ -1,9 +1,9 @@
-﻿using LinkFinder.DbSaver.Models;
+﻿using LinkFinder.DbWorker.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 
-namespace LinkFinder.DbSaver.EntityConfiguration
+namespace LinkFinder.DbWorker.EntityConfiguration
 {
     public class TestConfiguration : IEntityTypeConfiguration<Test>
     {

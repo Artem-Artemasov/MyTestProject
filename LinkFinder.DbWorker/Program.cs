@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 
-namespace LinkFinder.DbSaver
+namespace LinkFinder.DbWorker
 {
     class Program
     {
@@ -20,7 +20,7 @@ namespace LinkFinder.DbSaver
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args).ConfigureServices((hostContext, services) =>
             {
-                services.AddEfRepository<LinkFounderDbContext>(options => options.UseSqlServer(@"Server=DESKTOP-BFO0R26; Database=LinkFounder; Trusted_Connection=True"));
+                services.AddEfRepository<LinkFinderDbContext>(options => options.UseSqlServer(@"Server=DESKTOP-BFO0R26; Database=LinkFounder; Trusted_Connection=True"));
                 services.AddScoped<LinkConsoleApp>();
                 services.AddScoped<DbWorker>();
             }).

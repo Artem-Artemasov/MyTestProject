@@ -1,4 +1,4 @@
-using LinkFinder.DbSaver.Models;
+using LinkFinder.DbWorker.Models;
 using LinkFinder.Logic.Models;
 using Moq;
 using NUnit.Framework;
@@ -7,7 +7,7 @@ using System.Data;
 using System.Threading;
 using System.Linq;
 
-namespace LinkFinder.DbSaver.Tests
+namespace LinkFinder.DbWorker.Tests
 {
     public class DataSaverTests
     {

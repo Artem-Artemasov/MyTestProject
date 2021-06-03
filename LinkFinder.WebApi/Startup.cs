@@ -1,6 +1,6 @@
-using LinkFinder.DbSaver;
+/*using LinkFinder.DbWorker;
 using LinkFinder.Logic.Services;
-using LinkFinder.Logic.Validators;
+using LinkFinder.Logic.Validators;*/
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -9,12 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace LinkFinder.WebApi
 {
@@ -36,8 +31,7 @@ namespace LinkFinder.WebApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "LinkFounder.WebApi", Version = "v1" });
             });
-            services.AddEfRepository<LinkFounderDbContext>(options => options.UseSqlServer(@"Server=DESKTOP-BFO0R26; Database=LinkFounder; Trusted_Connection=True"));
-            services.AddScoped<DbWorker>();
+           /* services.AddEfRepository<LinkFounderDbContext>(options => options.UseSqlServer(@"Server=DESKTOP-BFO0R26; Database=LinkFounder; Trusted_Connection=True"));*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

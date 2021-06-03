@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LinkFinder.DbSaver.Models
+namespace LinkFinder.DbWorker.Models
 {
     public class Result
     {
@@ -10,9 +10,5 @@ namespace LinkFinder.DbSaver.Models
         public int TimeResponse { get; set; }
         public int TestId { get; set; }
         public Test Test { get; set; }
-        [InverseProperty("Results")]
-        public IEnumerable<OnlyHtml> OnlyHtml { get; set; }
-        [InverseProperty("Results")]
-        public IEnumerable<OnlySitemap> OnlySitemap { get; set; }
     }
 }

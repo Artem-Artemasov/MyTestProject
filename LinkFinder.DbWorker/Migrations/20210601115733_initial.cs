@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace LinkFinder.DbSaver.Migrations
+namespace LinkFinder.DbWorker.Migrations
 {
     public partial class initial : Migration
     {

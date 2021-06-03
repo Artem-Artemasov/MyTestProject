@@ -6,7 +6,7 @@ using LinkFinder.Logic;
 using System;
 using System.Linq;
 
-namespace LinkFinder.DbSaver
+namespace LinkFinder.DbWorker
 {
     public class LinkConsoleApp
     {

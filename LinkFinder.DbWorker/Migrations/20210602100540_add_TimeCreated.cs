@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace LinkFinder.DbSaver.Migrations
+namespace LinkFinder.DbWorker.Migrations
 {
     public partial class add_TimeCreated : Migration
     {

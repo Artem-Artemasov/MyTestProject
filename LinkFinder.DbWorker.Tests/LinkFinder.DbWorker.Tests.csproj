@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LinkFinder.DbSaver\LinkFinder.DbSaver.csproj" />
+    <ProjectReference Include="..\LinkFinder.DbWorker\LinkFinder.DbWorker.csproj" />
     <ProjectReference Include="..\LinkFinder\LinkFinder.Logic.csproj" />
   </ItemGroup>
 

@@ -15,8 +15,4 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\LinkFinder.DbSaver\LinkFinder.DbSaver.csproj" />
-  </ItemGroup>
-
 </Project>

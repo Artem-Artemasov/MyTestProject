@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using LinkFinder.DbSaver.Models;
+using LinkFinder.DbWorker.Models;
 using System.Data;
 using LinkFinder.Logic.Models;
 
-namespace LinkFinder.DbSaver
+namespace LinkFinder.DbWorker
 {
     //using for save test and results
     public class DbWorker

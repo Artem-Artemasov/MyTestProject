@@ -5,15 +5,15 @@ VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkFinder.Logic", "LinkFinder\LinkFinder.Logic.csproj", "{B6E2EA94-77A7-49BC-86EA-9C2F09AB3025}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkFinder.DbSaver", "LinkFinder.DbSaver\LinkFinder.DbSaver.csproj", "{AFF11E36-ADFD-4E95-8511-4E66D71AA5A3}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkFinder.DbSaver.Tests", "LinkFinder.DbSaver.Tests\LinkFinder.DbSaver.Tests.csproj", "{A71CFCA5-6334-445D-804B-8725C251E07D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkFinder.Logic.Tests", "LinkFinder.Tests\LinkFinder.Logic.Tests.csproj", "{6FA3B017-D2AE-483E-993A-697962A4F43B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkFinder.WebApi", "LinkFinder.WebApi\LinkFinder.WebApi.csproj", "{6FA2F40E-17C9-43EE-B6B2-16E9CF794D04}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkFinder.ConsoleOutput", "LinkFinderConsoleOutput\LinkFinder.ConsoleOutput.csproj", "{2568C296-75F9-4C74-A1C1-7EC5D8E51350}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkFinder.DbWorker", "LinkFinder.DbWorker\LinkFinder.DbWorker.csproj", "{65ABB867-63EB-49F1-89B4-F396B876D8B4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkFinder.DbWorker.Tests", "LinkFinder.DbWorker.Tests\LinkFinder.DbWorker.Tests.csproj", "{DF955326-2FDC-4435-AE06-E5FAA984460B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +25,6 @@ Global
 		{B6E2EA94-77A7-49BC-86EA-9C2F09AB3025}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6E2EA94-77A7-49BC-86EA-9C2F09AB3025}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6E2EA94-77A7-49BC-86EA-9C2F09AB3025}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AFF11E36-ADFD-4E95-8511-4E66D71AA5A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AFF11E36-ADFD-4E95-8511-4E66D71AA5A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AFF11E36-ADFD-4E95-8511-4E66D71AA5A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AFF11E36-ADFD-4E95-8511-4E66D71AA5A3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A71CFCA5-6334-445D-804B-8725C251E07D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A71CFCA5-6334-445D-804B-8725C251E07D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A71CFCA5-6334-445D-804B-8725C251E07D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A71CFCA5-6334-445D-804B-8725C251E07D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6FA3B017-D2AE-483E-993A-697962A4F43B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6FA3B017-D2AE-483E-993A-697962A4F43B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FA3B017-D2AE-483E-993A-697962A4F43B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +37,14 @@ Global
 		{2568C296-75F9-4C74-A1C1-7EC5D8E51350}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2568C296-75F9-4C74-A1C1-7EC5D8E51350}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2568C296-75F9-4C74-A1C1-7EC5D8E51350}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65ABB867-63EB-49F1-89B4-F396B876D8B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65ABB867-63EB-49F1-89B4-F396B876D8B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65ABB867-63EB-49F1-89B4-F396B876D8B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65ABB867-63EB-49F1-89B4-F396B876D8B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF955326-2FDC-4435-AE06-E5FAA984460B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF955326-2FDC-4435-AE06-E5FAA984460B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF955326-2FDC-4435-AE06-E5FAA984460B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF955326-2FDC-4435-AE06-E5FAA984460B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
