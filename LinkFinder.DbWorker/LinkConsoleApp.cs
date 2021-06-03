@@ -10,9 +10,9 @@ namespace LinkFinder.DbWorker
 {
     public class LinkConsoleApp
     {
-        private readonly DbWorker _dbWorker;
+        private readonly DatabaseWorker _dbWorker;
 
-        public LinkConsoleApp(DbWorker worker)
+        public LinkConsoleApp(DatabaseWorker worker)
         {
             _dbWorker = worker;
         }

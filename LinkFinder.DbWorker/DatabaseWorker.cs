@@ -8,11 +8,12 @@ using LinkFinder.Logic.Models;
 namespace LinkFinder.DbWorker
 {
     //using for save test and results
-    public class DbWorker
+    public class DatabaseWorker
     {
         private readonly IRepository<Test> _testsRepository;
         private readonly IRepository<Result> _resultRepository;
-        public DbWorker(IRepository<Test> testRepository, IRepository<Result> resultRepository)
+
+        public DatabaseWorker(IRepository<Test> testRepository, IRepository<Result> resultRepository)
         {
             _testsRepository = testRepository;
             _resultRepository = resultRepository;

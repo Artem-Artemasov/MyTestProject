@@ -22,7 +22,7 @@ namespace LinkFinder.DbWorker
             {
                 services.AddEfRepository<LinkFinderDbContext>(options => options.UseSqlServer(@"Server=DESKTOP-BFO0R26; Database=LinkFounder; Trusted_Connection=True"));
                 services.AddScoped<LinkConsoleApp>();
-                services.AddScoped<DbWorker>();
+                services.AddScoped<DatabaseWorker>();
             }).
             ConfigureLogging(options => options.SetMinimumLevel(LogLevel.Error));
     }

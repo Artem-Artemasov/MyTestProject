@@ -15,4 +15,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LinkFinder.DbWorker\LinkFinder.DbWorker.csproj" />
+  </ItemGroup>
+
 </Project>

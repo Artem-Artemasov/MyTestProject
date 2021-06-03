@@ -9,18 +9,18 @@ using System.Linq;
 
 namespace LinkFinder.DbWorker.Tests
 {
-    public class DataSaverTests
+    public class DatabaseWorkerTests
     {
         Mock<IRepository<Test>> mockTestRepository;
         Mock<IRepository<Result>> mockResultRepository;
-        DbWorker dataSaver;
+        DatabaseWorker dataSaver;
 
         [SetUp]
         public void SetUp()
         {
             mockTestRepository = new Mock<IRepository<Test>>();
             mockResultRepository = new Mock<IRepository<Result>>();
-            dataSaver = new DbWorker(mockTestRepository.Object, mockResultRepository.Object);
+            dataSaver = new DatabaseWorker(mockTestRepository.Object, mockResultRepository.Object);
         }
 
         [Test]
