@@ -50,7 +50,7 @@ namespace LinkFinder.Logic.Validators
                 return false;
             }
 
-            if (link.IndexOf(".") == -1) // not have .
+            if (link.Contains(".") == false) // not have .
             {
                 return false;
             }

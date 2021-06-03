@@ -27,7 +27,7 @@ namespace LinkFinder.DbWorker.Tests
         public void Save_CorrectInputUrl_ShouldAddIt()
         {
             //Act
-            dataSaver.Save("https://www.example.com", new List<Link>()).Wait();
+            dataSaver.SaveAsync("https://www.example.com", new List<Link>(),new List<Link>()).Wait();
 
             //Assert
             mockTestRepository.Verify(p => p.AddAsync(It.Is<Test>(p => p.Url == "https://www.example.com"), It.IsAny<CancellationToken>()), Times.Once);
@@ -36,11 +36,28 @@ namespace LinkFinder.DbWorker.Tests
         [Test]
         public void Save_CorrectLinkList_ShouldAddTest()
         {
+            //Arrange
+            var inputList = new List<Link>() { new Link("https://example.com/books") };
+
             //Act
-            dataSaver.Save("https://www.example.com", new List<Link>() { new Link("https://example.com/books")}).Wait();
+            dataSaver.SaveAsync("https://www.example.com", inputList, inputList).Wait();
 
             //Assert
             mockResultRepository.Verify(p => p.AddRange(It.Is<IEnumerable<Result>>(f => f.Any(result => result.Url == "https://example.com/books"))));
+        }
+
+        
+        [Test]
+        public void Save_LinksInHtmlAndSitemap_ShouldSetAllMatchProperties()
+        {
+            //Arrange
+            var inputList = new List<Link>() { new Link("https://example.com/books") };
+
+            //Act
+            dataSaver.SaveAsync("https://www.example.com", inputList, inputList).Wait();
+
+            //Assert
+            mockResultRepository.Verify(p => p.AddRange(It.Is<IEnumerable<Result>>(f => f.Any(result => result.InSitemap && result.InHtml))));
         }
     }
 }

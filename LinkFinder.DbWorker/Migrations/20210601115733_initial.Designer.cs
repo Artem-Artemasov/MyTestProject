@@ -20,7 +20,7 @@ namespace LinkFinder.DbWorker.Migrations
                 .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("LinkFounder.DbSaver.Models.Result", b =>
+            modelBuilder.Entity("LinkFinder.DbWorker.Models.Result", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,7 +38,7 @@ namespace LinkFinder.DbWorker.Migrations
                     b.ToTable("Results");
                 });
 
-            modelBuilder.Entity("LinkFounder.DbSaver.Models.Test", b =>
+            modelBuilder.Entity("LinkFinder.DbWorker.Models.Test", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

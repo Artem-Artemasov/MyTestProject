@@ -20,7 +20,7 @@ namespace LinkFinder.DbWorker
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args).ConfigureServices((hostContext, services) =>
             {
-                services.AddEfRepository<LinkFinderDbContext>(options => options.UseSqlServer(@"Server=DESKTOP-BFO0R26; Database=LinkFounder; Trusted_Connection=True"));
+                services.AddEfRepository<LinkFinderDbContext>(options => options.UseSqlServer(@"Server=DESKTOP-BFO0R26; Database=LinkFinder; Trusted_Connection=True"));
                 services.AddScoped<LinkConsoleApp>();
                 services.AddScoped<DatabaseWorker>();
             }).

@@ -36,13 +36,9 @@ namespace LinkFinder.DbWorker
             var htmlLinks = htmlCrawler.GetLinks(inputUrl);
             var sitemapLinks = sitemapCrawler.GetLinks(inputUrl);
 
-            var allLinks = htmlLinks.Except(sitemapLinks, (x, y) => x.Url == y.Url)
-                                           .Concat(sitemapLinks)
-                                           .ToList();
+            linkPrinter.PrintAllInformation(htmlLinks, sitemapLinks);
 
-            linkPrinter.PrintAllInformation(htmlLinks, sitemapLinks, allLinks);
-
-            _dbWorker.Save(inputUrl,allLinks).Wait();
+            _dbWorker.SaveAsync(inputUrl,htmlLinks,sitemapLinks).Wait();
 
             Environment.Exit(0);
         }

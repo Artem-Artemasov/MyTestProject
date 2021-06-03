@@ -1,0 +1,26 @@
+﻿@model IEnumerable<LinkFinder.DbWorker.Models.Test>
+@{
+
+    Layout = "_Layout";
+}
+<div class="inputForm w-75 mx-auto my-4">
+    <form class = "d-flex justify-content-around align-middle flex-wrap" method="post" asp-controller="Test" asp-action="PostUrl">
+        <h4 class="px-3 my-2">Enter a website</h4>
+        <input type="text" name="url" required class="flex-fill mx-4 my-2 border rounded">
+        <input type="submit" value="Test" class="form-control w-auto px-5 my-2 btn-outline-success">
+    </form>
+</div>
+
+<div class="tests text-center">
+    <h2 class="caption py-2">Test results</h2>
+    <div class="container rounded m-auto bg-light">
+        @foreach (var test in Model)
+        {
+            <div class="row py-3 border">
+                <div class="col-6 url border-right">@test.Url</div>
+                <div class="col-3 date border-right">@test.TimeCreated</div>
+                <div class="col-3 linkToDetail">@Html.ActionLink("see details","Index", "Result", new { id = test.Id }, new { @class = "link-primary" })</div>
+            </div>
+         }
+    </div>
+</div>

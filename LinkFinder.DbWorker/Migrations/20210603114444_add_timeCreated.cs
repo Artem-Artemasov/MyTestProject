@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LinkFinder.DbWorker.Migrations
 {
-    public partial class add_TimeCreated : Migration
+    public partial class add_timeCreated : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +12,7 @@ namespace LinkFinder.DbWorker.Migrations
                 table: "Tests",
                 type: "datetime2",
                 nullable: false,
-                computedColumnSql: "CONVERT(date,GETUTCDATE())");
+                computedColumnSql: "GETUTCDATE()");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

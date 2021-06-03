@@ -25,8 +25,12 @@ namespace LinkFinder.ConsoleOutput
             return _consoleWritter.ReadLine();
         }
 
-        public virtual void PrintAllInformation(IEnumerable<Link> htmlLinks, IEnumerable<Link> sitemapLinks, IEnumerable<Link> allLinks)
+        public virtual void PrintAllInformation(IEnumerable<Link> htmlLinks, IEnumerable<Link> sitemapLinks)
         {
+            var allLinks = htmlLinks.Except(sitemapLinks, (x, y) => x.Url == y.Url)
+                                .Concat(sitemapLinks)
+                                .ToList();
+
             PrintCaption("\t Urls FOUNDED IN SITEMAP.XML but not founded after crawling a web site");
             PrintList(sitemapLinks.Except(htmlLinks, (x, y) => x.Url == y.Url));
 

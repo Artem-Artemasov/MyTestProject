@@ -1,0 +1,18 @@
+﻿@model IEnumerable<LinkFinder.DbWorker.Models.Result>
+@{
+    Layout = "_Layout";
+}
+
+<div class="performance">
+    @foreach (var link in Model)
+    {
+        <div class="row py-3 border">
+            <div class="col">@link.Url</div>
+            <div class="col">@link.TimeResponse</div>
+        </div>
+    }
+</div>
+<div class="InSitemap">
+</div>
+<div class="InHtml">
+</div>

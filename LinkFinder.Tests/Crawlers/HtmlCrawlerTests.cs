@@ -83,8 +83,8 @@ namespace LinkFinder.Logic.Tests
           
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(result[0].Url, "https://www.example.com/");
-                Assert.AreEqual(result[1].Url, "https://www.example.com/afraid");
+                Assert.IsTrue(result.Any(p=>p.Url == "https://www.example.com/"));
+                Assert.IsTrue(result.Any(p => p.Url == "https://www.example.com/afraid"));
             });
         }
 

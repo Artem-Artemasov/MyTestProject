@@ -10,7 +10,7 @@ namespace LinkFinder.DbWorker.EntityConfiguration
         public void Configure(EntityTypeBuilder<Test> builder)
         {
             builder.Property(p => p.TimeCreated)
-                .HasComputedColumnSql("CONVERT(date,GETUTCDATE())");
+                .HasComputedColumnSql("GETUTCDATE()");
         }
     }
 }

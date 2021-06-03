@@ -32,7 +32,7 @@ namespace LinkFinder.ConsoleOutput
                                            .Concat(sitemapLinks)
                                            .ToList();
 
-            linkPrinter.PrintAllInformation(htmlLinks, sitemapLinks, allLinks);
+            linkPrinter.PrintAllInformation(htmlLinks, sitemapLinks);
         }
     }
 }
