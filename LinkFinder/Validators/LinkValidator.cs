@@ -29,13 +29,20 @@ namespace LinkFinder.Logic.Validators
                 ".woff",
                 ".woff2",
                 ".ico",
+                "@"
             };
 
            return extensions.Any(p => link.Contains(p));
         }
 
-        public virtual bool IsCorrectLink(string link)
+        public virtual bool IsCorrectLink(string link,out string errorMessage)
         {
+            if (String.IsNullOrEmpty(link))
+            {
+                errorMessage = "String is empty";
+                return false;
+            }
+
             int indexProtocol = link.IndexOf("https://");
             string protocol = "https://";
 
@@ -47,30 +54,30 @@ namespace LinkFinder.Logic.Validators
             
             if ( indexProtocol == -1 || link.Length <= protocol.Length) // not have protocol or link == protocol
             {
+                errorMessage = "Url haven't protocol or url is a only protocol";
                 return false;
             }
 
             if (link.Contains(".") == false) // not have .
             {
+                errorMessage = "Url haven't a domain";
                 return false;
             }
             
-            if (link.Length <= indexProtocol + protocol.Length + 1 || Char.IsLetter(link[indexProtocol + protocol.Length + 1]) == false)
-            {
-                return false;
-            }
-
             int indexOfwww = link.IndexOf("www.");
             if (link.Length <=  indexOfwww+ 4)
             {
+                errorMessage = "So short url";
                 return false;
             }
 
-            if (indexOfwww != -1 && link.IndexOf('.', indexOfwww + 4) == -1)
+            if (indexOfwww != -1 && link.IndexOf('.', indexOfwww + 4) == -1) // for example: link == https://www. 
             {
+                errorMessage = "Url not contains a domain name";
                 return false;
             }
 
+            errorMessage = "";
             return true;
         }
 

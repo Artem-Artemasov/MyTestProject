@@ -26,12 +26,13 @@ namespace LinkFinder.Logic.Tests
             mockLinkConverter = new Mock<LinkConverter>();
             mockRequestService = new Mock<RequestService>();
             mockLinkParser = new Mock<LinkParser>();
+            string errorMessage;
 
             int timeResponse;
             mockRequestService.Setup(p => p.SendRequest(It.IsAny<string>(), out timeResponse))
                               .Returns(new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.OK });
 
-            mockLinkValidator.Setup(p => p.IsCorrectLink(It.IsAny<string>()))
+            mockLinkValidator.Setup(p => p.IsCorrectLink(It.IsAny<string>(),out errorMessage))
                           .Returns(true);
 
             mockLinkValidator.Setup(p => p.IsInCurrentSite(It.IsAny<string>(), It.IsAny<string>()))
@@ -45,8 +46,9 @@ namespace LinkFinder.Logic.Tests
         public void GetLinks_EmptyString_ReturnEmptyList()
         {
             //Arrange
+            string errorMessage;
             mockLinkValidator
-                .Setup(p => p.IsCorrectLink(""))
+                .Setup(p => p.IsCorrectLink("",out errorMessage))
                 .Returns(false);
 
             HtmlCrawler htmlCrawler = new HtmlCrawler(mockRequestService.Object, mockLinkConverter.Object, mockLinkParser.Object, mockLinkValidator.Object);
@@ -92,8 +94,9 @@ namespace LinkFinder.Logic.Tests
         public void GetLinks_UnavaliablePage_ReturnEmptyList()
         {
             //Arrange
+            string errorMessage;
             mockLinkValidator
-                .Setup(p => p.IsCorrectLink("https://example.com/"))
+                .Setup(p => p.IsCorrectLink("https://example.com/",out errorMessage))
                 .Returns(true);
 
             int timeResponse;

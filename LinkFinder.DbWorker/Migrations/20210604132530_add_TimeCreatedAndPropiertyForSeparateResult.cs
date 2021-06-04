@@ -1,11 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LinkFinder.DbWorker.Migrations
 {
-    public partial class add_twoStates : Migration
+    public partial class add_TimeCreatedAndPropiertyForSeparateResult : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<DateTime>(
+                name: "TimeCreated",
+                table: "Tests",
+                type: "datetime2",
+                nullable: false,
+                defaultValueSql: "GETUTCDATE()");
+
             migrationBuilder.AddColumn<bool>(
                 name: "InHtml",
                 table: "Results",
@@ -23,6 +31,10 @@ namespace LinkFinder.DbWorker.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "TimeCreated",
+                table: "Tests");
+
             migrationBuilder.DropColumn(
                 name: "InHtml",
                 table: "Results");

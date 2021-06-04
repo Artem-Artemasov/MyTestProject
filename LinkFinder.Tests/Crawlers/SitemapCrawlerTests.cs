@@ -25,8 +25,9 @@ namespace LinkFinder.Logic.Tests
             mockLinkConverter = new Mock<LinkConverter>();
             mockRequestService = new Mock<RequestService>();
             mockLinkParser = new Mock<LinkParser>();
+            string errorMessage;
 
-            mockLinkValidator.Setup(p => p.IsCorrectLink(It.IsAny<string>()))
+            mockLinkValidator.Setup(p => p.IsCorrectLink(It.IsAny<string>(),out errorMessage))
                              .Returns(true);
             mockLinkValidator.Setup(p => p.IsInCurrentSite(It.IsAny<string>(), It.IsAny<string>()))
                              .Returns(true);
@@ -38,7 +39,8 @@ namespace LinkFinder.Logic.Tests
         public void GetLinks_EmptyString__ReturnEmptyList()
         {
             //Arrange
-            mockLinkValidator.Setup(p => p.IsCorrectLink(""))
+            string errorMessage;
+            mockLinkValidator.Setup(p => p.IsCorrectLink("",out errorMessage))
                              .Returns(false);
            
             mockLinkParser.Setup(p => p.Parse(It.IsAny<string>()))

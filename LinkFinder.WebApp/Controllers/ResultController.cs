@@ -1,9 +1,8 @@
 ﻿using LinkFinder.DbWorker;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using PagedList.Core;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace LinkFinder.WebApp.Controllers
 {
@@ -16,11 +15,15 @@ namespace LinkFinder.WebApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int id)
+        public async Task<IActionResult> Index(int id, int page = 1 , int pageSize = 10)
         {
             var results = await _dbWorker.GetResultsAsync(id);
+            var outputResults = results.OrderBy(p=>p.TimeResponse).ToPagedList(page,pageSize);
 
-            return View(results);
+            ViewBag.OnlySitemap = results.Where(p => p.InHtml == false).ToList();
+            ViewBag.OnlyHtml = results.Where(p => p.InSitemap == false).ToList();
+
+            return View(outputResults);
         }
     }
 }

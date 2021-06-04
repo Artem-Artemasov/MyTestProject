@@ -12,8 +12,8 @@ namespace LinkFinder.DbWorker
         static async Task Main(string[] args)
         {
             using IHost host = CreateHostBuilder(args).Build();
-            var linkViewer = host.Services.GetService<LinkConsoleApp>();
-            linkViewer.Start();
+            var linkConsoleApp = host.Services.GetService<LinkConsoleApp>();
+            linkConsoleApp.Start();
             await host.RunAsync();
         }
 

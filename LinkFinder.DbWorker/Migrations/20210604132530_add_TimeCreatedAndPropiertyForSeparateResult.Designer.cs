@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LinkFinder.DbWorker.Migrations
 {
     [DbContext(typeof(LinkFinderDbContext))]
-    [Migration("20210603130349_add_twoStates")]
-    partial class add_twoStates
+    [Migration("20210604132530_add_TimeCreatedAndPropiertyForSeparateResult")]
+    partial class add_TimeCreatedAndPropiertyForSeparateResult
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -58,9 +58,9 @@ namespace LinkFinder.DbWorker.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("TimeCreated")
-                        .ValueGeneratedOnAddOrUpdate()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasComputedColumnSql("GETUTCDATE()");
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("Url")
                         .HasColumnType("nvarchar(max)");

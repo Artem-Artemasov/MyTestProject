@@ -21,10 +21,10 @@ namespace LinkFinder.DbWorker
             var requestService = new RequestService();
             var linkParser = new LinkParser();
             var linkConverter = new LinkConverter();
-            var LinkValidator = new LinkValidator();
+            var linkValidator = new LinkValidator();
 
-            var htmlCrawler = new HtmlCrawler(requestService, linkConverter, linkParser, LinkValidator);
-            var sitemapCrawler = new SitemapCrawler(requestService, linkConverter, linkParser, LinkValidator);
+            var htmlCrawler = new HtmlCrawler(requestService, linkConverter, linkParser, linkValidator);
+            var sitemapCrawler = new SitemapCrawler(requestService, linkConverter, linkParser, linkValidator);
 
             var consoleWritter = new ConsoleWritter();
             var linkPrinter = new LinkPrinter(consoleWritter);

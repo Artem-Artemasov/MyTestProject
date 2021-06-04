@@ -22,57 +22,63 @@ namespace LinkFinder.Logic.Tests
         public void IsCorrectLink_EmptyString()
         {
             //Act
-            var result = linkValidator.IsCorrectLink("");
+            var result = linkValidator.IsCorrectLink("",out string errorMessage);
 
             //Assert
-            Assert.IsFalse(result);
+            Assert.Multiple(() =>
+            {
+                Assert.IsFalse(result);
+                Assert.AreNotEqual(errorMessage, "");
+            });
         }
 
         [Test]
         public void IsCorrectLink_OnlyProtocol_False()
         {
             //Act
-            var result = linkValidator.IsCorrectLink("https://");
+            var result = linkValidator.IsCorrectLink("https://", out string errorMessage);
 
             //Assert
-            Assert.IsFalse(result);
-        }
-
-        [Test]
-        public void IsCorrectLink_ProtocolAndDot_False()
-        {
-            //Act
-            var result = linkValidator.IsCorrectLink("https://.");
-
-            //Assert
-            Assert.IsFalse(result);
+            Assert.Multiple(() =>
+            {
+                Assert.IsFalse(result);
+                Assert.AreNotEqual(errorMessage, "");
+            });
         }
 
         [Test]
         public void IsCorrectLink_ProtocolAndWwwDot_False()
         {
             //Act
-            var result = linkValidator.IsCorrectLink("https://www.");
+            var result = linkValidator.IsCorrectLink("https://www.", out string errorMessage);
 
             //Assert
-            Assert.IsFalse(result);
+            Assert.Multiple(() =>
+            {
+                Assert.IsFalse(result);
+                Assert.AreNotEqual(errorMessage, "");
+            });
         }
 
         [Test]
         public void IsCorrectLink_WithOutDomain_False()
         {
             //Act
-            var result = linkValidator.IsCorrectLink("https://www.example");
+            var result = linkValidator.IsCorrectLink("https://www.example", out string errorMessage);
 
             //Assert
-            Assert.IsFalse(result);
+            Assert.Multiple(() =>
+            {
+                Assert.IsFalse(result);
+                Assert.AreNotEqual(errorMessage, "");
+            });
         }
 
         [Test]
         public void IsCorrectLink_CorrectLink_True()
         {
             //Act
-            var result = linkValidator.IsCorrectLink("https://www.example.com/");
+            var result = linkValidator.IsCorrectLink("https://www.example.com/", out string errorMessage);
 
             //Assert
             Assert.IsTrue(result);

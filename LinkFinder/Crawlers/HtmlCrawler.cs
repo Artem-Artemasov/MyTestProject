@@ -26,7 +26,7 @@ namespace LinkFinder.Logic.Crawlers
         {
             var storage = new List<Link>();
 
-            if (_linkValidator.IsCorrectLink(baseUrl) == false)
+            if (_linkValidator.IsCorrectLink(baseUrl,out string errorMessage) == false)
             {
                 return storage;
             }
