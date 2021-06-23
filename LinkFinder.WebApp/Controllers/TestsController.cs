@@ -1,20 +1,17 @@
 ﻿using LinkFinder.DbWorker;
-using LinkFinder.DbWorker.Models;
 using LinkFinder.Logic.Validators;
-using LinkFinder.WebApp.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LinkFinder.WebApp.Controllers
 {
-    public class TestController : Controller
+    public class TestsController : Controller
     {
         private readonly DatabaseWorker _dbWorker;
-        private readonly WebCrawlerApp _webCrawlerApp;
+        private readonly CrawlerApp _webCrawlerApp;
         private readonly LinkValidator _linkValidator;
 
-        public TestController(DatabaseWorker dbWorker,WebCrawlerApp webCrawlerApp,LinkValidator linkValidator)
+        public TestsController(DatabaseWorker dbWorker, CrawlerApp webCrawlerApp, LinkValidator linkValidator)
         {
             _dbWorker = dbWorker;
             _webCrawlerApp = webCrawlerApp;
@@ -31,9 +28,9 @@ namespace LinkFinder.WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostUrl(string url) 
+        public async Task<IActionResult> PostUrl(string url)
         {
-            if (_linkValidator.IsCorrectLink(url,out string errorMessage) == false)
+            if (_linkValidator.IsCorrectLink(url, out string errorMessage) == false)
             {
                 TempData["Error"] = errorMessage;
                 return RedirectToAction("Index");

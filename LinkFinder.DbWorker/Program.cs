@@ -1,4 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LinkFinder.ConsoleOutput;
+using LinkFinder.Logic.Crawlers;
+using LinkFinder.Logic.Services;
+using LinkFinder.Logic.Validators;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -12,7 +16,7 @@ namespace LinkFinder.DbWorker
         static async Task Main(string[] args)
         {
             using IHost host = CreateHostBuilder(args).Build();
-            var linkConsoleApp = host.Services.GetService<LinkConsoleApp>();
+            var linkConsoleApp = host.Services.GetService<CrawlerConsoleApp>();
             linkConsoleApp.Start();
             await host.RunAsync();
         }
@@ -21,9 +25,17 @@ namespace LinkFinder.DbWorker
             Host.CreateDefaultBuilder(args).ConfigureServices((hostContext, services) =>
             {
                 services.AddEfRepository<LinkFinderDbContext>(options => options.UseSqlServer(@"Server=DESKTOP-BFO0R26; Database=LinkFinder; Trusted_Connection=True"));
-                services.AddScoped<LinkConsoleApp>();
+                services.AddScoped<CrawlerConsoleApp>();
                 services.AddScoped<DatabaseWorker>();
-            }).
-            ConfigureLogging(options => options.SetMinimumLevel(LogLevel.Error));
+                services.AddScoped<RequestService>();
+                services.AddScoped<LinkParser>();
+                services.AddScoped<LinkConverter>();
+                services.AddScoped<LinkValidator>();
+                services.AddScoped<HtmlCrawler>();
+                services.AddScoped<SitemapCrawler>();
+                services.AddScoped<ConsoleWritter>();
+                services.AddScoped<LinkPrinter>();
+            })
+            .ConfigureLogging(options => options.SetMinimumLevel(LogLevel.Error));
     }
 }

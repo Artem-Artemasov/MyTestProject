@@ -1,20 +1,17 @@
-﻿using LinkFinder.DbWorker;
-using LinkFinder.Logic;
+﻿using LinkFinder.Logic;
 using LinkFinder.Logic.Crawlers;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LinkFinder.WebApp.Services
+namespace LinkFinder.DbWorker
 {
-    public class WebCrawlerApp
+    public class CrawlerApp
     {
         private readonly HtmlCrawler _htmlCrawler;
         private readonly SitemapCrawler _sitemapCrawler;
         private readonly DatabaseWorker _dbWorker;
 
-        public WebCrawlerApp(HtmlCrawler htmlCrawler,SitemapCrawler sitemapCrawler,DatabaseWorker dbWorker)
+        public CrawlerApp(HtmlCrawler htmlCrawler, SitemapCrawler sitemapCrawler, DatabaseWorker dbWorker)
         {
             _htmlCrawler = htmlCrawler;
             _sitemapCrawler = sitemapCrawler;
@@ -29,7 +26,7 @@ namespace LinkFinder.WebApp.Services
                                            .Concat(sitemapLinks)
                                            .ToList();
 
-            await _dbWorker.SaveAsync(url, htmlLinks,sitemapLinks);
+            await _dbWorker.SaveAsync(url, htmlLinks, sitemapLinks);
         }
     }
 }

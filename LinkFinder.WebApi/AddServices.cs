@@ -2,10 +2,11 @@
 using LinkFinder.Logic.Crawlers;
 using LinkFinder.Logic.Services;
 using LinkFinder.Logic.Validators;
+using LinkFinder.WebApi.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LinkFinder.WebApp
+namespace LinkFinder.WebApi
 {
     public static class AddServices
     {
@@ -20,6 +21,7 @@ namespace LinkFinder.WebApp
             services.AddScoped<HtmlCrawler>();
             services.AddScoped<SitemapCrawler>();
             services.AddScoped<CrawlerApp>();
+            services.AddScoped<ResultsService>();
         }
     }
 }

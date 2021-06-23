@@ -1,12 +1,15 @@
+using LinkFinder.WebApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using System;
+using System.IO;
+using System.Reflection;
 
-
-namespace LinkFinder.WebApp
+namespace LinkFinder.WebApi
 {
     public class Startup
     {
@@ -20,7 +23,19 @@ namespace LinkFinder.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(option => option.EnableEndpointRouting = false);
+
+            services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo {
+                    Title = "LinkFinder.WebApi", 
+                    Description = ".NET Core WebApi application for crawling a website",
+                    Version = "v1" });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
             services.AddApplicationServices();
         }
 
@@ -30,17 +45,19 @@ namespace LinkFinder.WebApp
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LinkFinder.WebApi v1"));
             }
-            else
-            {
-                app.UseHsts();
-            }
+
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseMvc(routes =>
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute("default", "{controller}/{id?}", defaults: new { controller = "Test", action = "Index" });
-                routes.MapRoute("posteddata", "{controller}/{action}/{id?}", defaults: new { controller = "Test", action = "Index" });
+                endpoints.MapControllers();
             });
         }
     }
