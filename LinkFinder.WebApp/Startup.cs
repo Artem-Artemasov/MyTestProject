@@ -39,7 +39,7 @@ namespace LinkFinder.WebApp
             app.UseStaticFiles();
             app.UseMvc(routes =>
             {
-                routes.MapRoute("default", "{controller}/{id?}", defaults: new { controller = "Test", action = "Index" });
+                routes.MapRoute("default", "{controller}/{id?}", defaults: new { controller = "Tests", action = "Index" });
                 routes.MapRoute("posteddata", "{controller}/{action}/{id?}", defaults: new { controller = "Test", action = "Index" });
             });
         }
