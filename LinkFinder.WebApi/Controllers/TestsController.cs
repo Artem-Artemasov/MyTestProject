@@ -1,58 +1,74 @@
 ﻿using LinkFinder.DbWorker;
 using LinkFinder.Logic.Validators;
+using LinkFinder.WebApi.RoutingParams;
+using LinkFinder.WebApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.Threading.Tasks;
 
 namespace LinkFinder.WebApi.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class TestsController : ControllerBase
     {
-        private readonly DatabaseWorker _dbWorker;
-        private readonly LinkValidator _linkValidator;
-        private readonly CrawlerApp _crawlerApp;
+        private readonly TestsService _testsService;
 
-        public TestsController(DatabaseWorker dbWorker, CrawlerApp crawlerApp, LinkValidator linkValidator)
+        public TestsController(TestsService testsService)
         {
-            _dbWorker = dbWorker;
-            _crawlerApp = crawlerApp;
-            _linkValidator = linkValidator;
+            _testsService = testsService;
         }
 
         /// <summary>
         /// Return all existing tests
         /// </summary>
         /// <returns></returns>
+        [Route("api/tests")]
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
-            var tests = await _dbWorker.GetTestsAsync();
+            var apiTests = await _testsService.GetAllTests();
 
-            return Ok(tests);
+            return Ok(apiTests);
         }
 
         /// <summary>
-        /// Check the input and start crawling the website
+        /// Return detail information about test
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        [Route("api/test/{id}")]
+        [HttpGet]
+        public async Task<IActionResult> GetTestResults(int id, [FromQuery] TestDetailParam param)
+        {
+            var results = await _testsService.GetTest(id, param);
+
+            return Ok(results);
+        }
+
+        /// <summary>
+        /// Add new test for input site
         /// </summary>
         /// <param name="url">URL that will be crawled</param>
         /// <returns></returns>
         /// <response code="200">Website with input URL has been crawled</response>     
         /// <response code="400">When input URL not valid, return errorMessage </response>     
+        [Route("api/test")]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] string url)
         {
-            if (_linkValidator.IsCorrectLink(url, out string errorMessage) == false)
+            var errorMessage = await _testsService.AddTest(url);
+
+            if (String.IsNullOrEmpty(errorMessage) == false)
             {
                 ModelState.AddModelError("errorMessage", errorMessage);
+
                 return BadRequest(ModelState);
             }
-
-            await _crawlerApp.StartWork(url);
-
-            return RedirectToAction("Get");
+         
+            return Ok();
         }
     }
 }

@@ -48,9 +48,9 @@ namespace LinkFinder.DbWorker
             return _testsRepository.GetAll();
         }
 
-        public async Task<IQueryable<Result>> GetResultsAsync(int id)
+        public async Task<IQueryable<Result>> GetResultsAsync(int testId)
         {
-            return _resultRepository.GetAll().Where(p => p.TestId == id);
+            return _resultRepository.GetAll().Where(p => p.TestId == testId);
         }
     }
 }
