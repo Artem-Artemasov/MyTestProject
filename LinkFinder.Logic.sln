@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkFinder.DbWorker.Tests",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkFinder.WebApp", "LinkFinder.WebApp\LinkFinder.WebApp.csproj", "{A3F9E580-CA58-44DA-8F8B-0C871D7ED82F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkFinder.WebApi", "LinkFinder.WebApi\LinkFinder.WebApi.csproj", "{082E416A-C88C-4E5C-ACA0-4865A80CC69B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinkFinder.WebApi", "LinkFinder.WebApi\LinkFinder.WebApi.csproj", "{082E416A-C88C-4E5C-ACA0-4865A80CC69B}"
+EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "LinkFinder.VueApp", "LinkFinder.VueApp\LinkFinder.VueApp.njsproj", "{C1030279-5F28-431F-8828-F431B8E25F75}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{082E416A-C88C-4E5C-ACA0-4865A80CC69B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{082E416A-C88C-4E5C-ACA0-4865A80CC69B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{082E416A-C88C-4E5C-ACA0-4865A80CC69B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1030279-5F28-431F-8828-F431B8E25F75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1030279-5F28-431F-8828-F431B8E25F75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1030279-5F28-431F-8828-F431B8E25F75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1030279-5F28-431F-8828-F431B8E25F75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
