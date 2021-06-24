@@ -4,6 +4,7 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <Name>LinkFinder.VueApp</Name>
     <RootNamespace>LinkFinder.VueApp</RootNamespace>
+    <SaveNodeJsSettingsInProjectFile>True</SaveNodeJsSettingsInProjectFile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -19,7 +20,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
     <NodejsPort>1337</NodejsPort>
-    <StartWebBrowser>true</StartWebBrowser>
+    <StartWebBrowser>True</StartWebBrowser>
     <ScriptArguments>serve</ScriptArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -37,6 +38,12 @@
     <Folder Include="LinkFinder.VueApp\" />
     <Folder Include="LinkFinder.VueApp\src\" />
     <Folder Include="LinkFinder.VueApp\src\assets\" />
+    <Folder Include="LinkFinder.VueApp\src\components\" />
+    <Folder Include="LinkFinder.VueApp\src\components\Link\" />
+    <Folder Include="LinkFinder.VueApp\src\components\PerformanceLinksBlock\" />
+    <Folder Include="LinkFinder.VueApp\src\components\TestsList\" />
+    <Folder Include="LinkFinder.VueApp\src\components\WebsiteUrlForm\" />
+    <Folder Include="LinkFinder.VueApp\src\pages\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="LinkFinder.VueApp\.babelrc" />
@@ -46,8 +53,28 @@
     <Content Include="LinkFinder.VueApp\package.json" />
     <Content Include="LinkFinder.VueApp\README.md" />
     <Content Include="LinkFinder.VueApp\src\App.vue" />
-    <Content Include="LinkFinder.VueApp\src\assets\logo.png" />
+    <Content Include="LinkFinder.VueApp\src\components\Link\Link.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="LinkFinder.VueApp\src\components\PerformanceLinksBlock\PerformanceLinksBlock.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="LinkFinder.VueApp\src\components\TestsList\TestsList.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="LinkFinder.VueApp\src\pages\Result.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="LinkFinder.VueApp\src\pages\Tests.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="LinkFinder.VueApp\src\components\WebsiteUrlForm\WebsiteUrlForm.vue">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="LinkFinder.VueApp\src\main.js" />
+    <Content Include="LinkFinder.VueApp\src\routes.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="LinkFinder.VueApp\webpack.config.js" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
