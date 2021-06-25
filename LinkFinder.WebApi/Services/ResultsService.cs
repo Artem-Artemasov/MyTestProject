@@ -17,19 +17,6 @@ namespace LinkFinder.WebApi.Services
             _dbWorker = dbWorker;
         }
 
-        public async Task<IEnumerable<ApiResult>> GetResults(int testId, TestDetailParam param)
-        {
-            var results = await _dbWorker.GetResultsAsync(testId);
-
-            if (!param.InSitemap && !param.InHtml)
-            {
-                results.Where(p => (p.InHtml == param.InHtml) && (p.InSitemap == param.InSitemap)); // select results with input param
-            }
-
-            return results.OrderBy(p => p.TimeResponse)
-                                    .Select(p => MapApiResult(p));
-        }
-
         public static ApiResult MapApiResult(Result result)
         {
             return new ApiResult()
@@ -39,5 +26,16 @@ namespace LinkFinder.WebApi.Services
                 Url = result.Url
             };
         }
+
+        public virtual async Task<ApiResultCount> GetResultCountAsync(int testId)
+        {
+            var countResults = (await _dbWorker.GetResultsAsync(testId)).Count();
+
+            return new ApiResultCount()
+            {
+                CountResults = countResults,
+            };
+        }
+
     }
 }

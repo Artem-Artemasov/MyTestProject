@@ -1,4 +1,5 @@
 ﻿using LinkFinder.DbWorker;
+using LinkFinder.DbWorker.Models;
 using LinkFinder.Logic.Validators;
 using LinkFinder.WebApi.Models;
 using LinkFinder.WebApi.RoutingParams;
@@ -24,7 +25,7 @@ namespace LinkFinder.WebApi.Services
             _resultsService = resultsService;
         }
 
-        public virtual async Task<IEnumerable<ApiTest>> GetAllTests()
+        public virtual async Task<IEnumerable<ApiTest>> GetAllTestsAsync()
         {
             var tests = await _dbWorker.GetTestsAsync();
 
@@ -36,7 +37,7 @@ namespace LinkFinder.WebApi.Services
             });
         }
 
-        public virtual async Task<string> AddTest(string url)
+        public virtual async Task<string> AddTestAsync(string url)
         {
             if (_linkValidator.IsCorrectLink(url, out string errorMessage) == false)
             {
@@ -48,18 +49,31 @@ namespace LinkFinder.WebApi.Services
             return null;
         }
 
-        public virtual async Task<ApiDetailTest> GetTest(int id, TestDetailParam param)
+        public virtual async Task<ApiDetailTest> GetTestAsync(int testId, TestDetailParam param)
         {
-            var test = (await _dbWorker.GetTestsAsync())
-                                    .Include(p => p.Results)
-                                    .FirstOrDefault(p => p.Id == id);
+            var test = (await _dbWorker.GetTestsAsync()).FirstOrDefault(p => p.Id == testId);
+            
+            //Get tests sorted it and get needed page
+            var testResults = (await _dbWorker.GetResultsAsync(test.Id)).OrderBy(p => p.TimeResponse).AsQueryable();
+            
+            //When need not all results
+            if (param.InHtml || param.InSitemap)
+            {
+                testResults = testResults.Where(p => p.InSitemap == param.InSitemap)
+                           .Where(p => p.InHtml == param.InHtml);
+            }
+            else
+            {
+                testResults =  testResults.Skip((param.Page - 1) * param.CountResultsOnPage)
+                                          .Take(param.CountResultsOnPage);
+            }
 
             return new ApiDetailTest()
             {
                 Id = test.Id,
                 Url = test.Url,
                 TimeCreated = test.TimeCreated,
-                Results = test.Results.Select(p => ResultsService.MapApiResult(p)),
+                Results = testResults.Select(p => ResultsService.MapApiResult(p)),
             };
         }
 

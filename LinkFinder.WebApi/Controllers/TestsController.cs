@@ -1,10 +1,6 @@
-﻿using LinkFinder.DbWorker;
-using LinkFinder.Logic.Validators;
-using LinkFinder.WebApi.RoutingParams;
+﻿using LinkFinder.WebApi.RoutingParams;
 using LinkFinder.WebApi.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Threading.Tasks;
 
@@ -14,10 +10,12 @@ namespace LinkFinder.WebApi.Controllers
     public class TestsController : ControllerBase
     {
         private readonly TestsService _testsService;
+        private readonly ResultsService _resultsService;
 
-        public TestsController(TestsService testsService)
+        public TestsController(TestsService testsService, ResultsService resultsService)
         {
             _testsService = testsService;
+            _resultsService = resultsService;
         }
 
         /// <summary>
@@ -28,7 +26,7 @@ namespace LinkFinder.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var apiTests = await _testsService.GetAllTests();
+            var apiTests = await _testsService.GetAllTestsAsync();
 
             return Ok(apiTests);
         }
@@ -43,7 +41,7 @@ namespace LinkFinder.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTestResults(int id, [FromQuery] TestDetailParam param)
         {
-            var results = await _testsService.GetTest(id, param);
+            var results = await _testsService.GetTestAsync(id, param);
 
             return Ok(results);
         }
@@ -57,9 +55,9 @@ namespace LinkFinder.WebApi.Controllers
         /// <response code="400">When input URL not valid, return errorMessage </response>     
         [Route("api/test")]
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] string url)
+        public async Task<IActionResult> Post([FromBody] CreateTestParam param)
         {
-            var errorMessage = await _testsService.AddTest(url);
+            var errorMessage = await _testsService.AddTestAsync(param.Url);
 
             if (String.IsNullOrEmpty(errorMessage) == false)
             {
@@ -67,8 +65,22 @@ namespace LinkFinder.WebApi.Controllers
 
                 return BadRequest(ModelState);
             }
-         
+
             return Ok();
+        }
+
+        /// <summary>
+        /// Return a count of results with test id
+        /// </summary>
+        /// <param name="id">Id of test which count results you want to get</param>
+        /// <returns></returns>
+        [Route("/api/test/{id}/count")]
+        [HttpGet]
+        public async Task<IActionResult> GetResultCount(int id)
+        {
+            var count = await _resultsService.GetResultCountAsync(id);
+
+            return Ok(count);
         }
     }
 }
