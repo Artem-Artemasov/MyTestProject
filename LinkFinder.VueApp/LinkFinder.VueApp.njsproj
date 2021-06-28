@@ -41,6 +41,7 @@
     <Folder Include="LinkFinder.VueApp\src\components\" />
     <Folder Include="LinkFinder.VueApp\src\components\Link\" />
     <Folder Include="LinkFinder.VueApp\src\components\LinksBlock\" />
+    <Folder Include="LinkFinder.VueApp\src\components\HidingWindow\" />
     <Folder Include="LinkFinder.VueApp\src\components\TestsList\" />
     <Folder Include="LinkFinder.VueApp\src\pages\" />
   </ItemGroup>
@@ -52,19 +53,22 @@
     <Content Include="LinkFinder.VueApp\package.json" />
     <Content Include="LinkFinder.VueApp\README.md" />
     <Content Include="LinkFinder.VueApp\src\App.vue" />
-    <Content Include="LinkFinder.VueApp\src\components\Link\Link.vue">
+    <Content Include="LinkFinder.VueApp\src\components\HidingWindow\hidingWindow.vue">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="LinkFinder.VueApp\src\components\LinksBlock\LinksBlock.vue">
+    <Content Include="LinkFinder.VueApp\src\components\Link\link.vue">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="LinkFinder.VueApp\src\components\TestsList\TestsList.vue">
+    <Content Include="LinkFinder.VueApp\src\components\LinksBlock\linksBlock.vue">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="LinkFinder.VueApp\src\pages\Result.vue">
+    <Content Include="LinkFinder.VueApp\src\components\TestsList\testsList.vue">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="LinkFinder.VueApp\src\pages\Tests.vue">
+    <Content Include="LinkFinder.VueApp\src\pages\ResultPage.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="LinkFinder.VueApp\src\pages\TestsPage.vue">
       <SubType>Code</SubType>
     </Content>
     <Content Include="LinkFinder.VueApp\src\main.js" />

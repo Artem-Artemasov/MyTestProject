@@ -49,7 +49,7 @@ namespace LinkFinder.WebApi.Controllers
         /// <summary>
         /// Add new test for input site
         /// </summary>
-        /// <param name="url">URL that will be crawled</param>
+        /// <param name="param">Param with it url will be crawled</param>
         /// <returns></returns>
         /// <response code="200">Website with input URL has been crawled</response>     
         /// <response code="400">When input URL not valid, return errorMessage </response>     
@@ -57,16 +57,19 @@ namespace LinkFinder.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateTestParam param)
         {
-            var errorMessage = await _testsService.AddTestAsync(param.Url);
-
-            if (String.IsNullOrEmpty(errorMessage) == false)
+            try
             {
-                ModelState.AddModelError("errorMessage", errorMessage);
+                var createdTest = await _testsService.AddTestAsync(param.Url);
+
+                return Ok(createdTest);
+            }
+            catch(Exception e)
+            {
+                
+                ModelState.AddModelError("errorMessage", e.Message);
 
                 return BadRequest(ModelState);
             }
-
-            return Ok();
         }
 
         /// <summary>
@@ -76,9 +79,9 @@ namespace LinkFinder.WebApi.Controllers
         /// <returns></returns>
         [Route("/api/test/{id}/count")]
         [HttpGet]
-        public async Task<IActionResult> GetResultCount(int id)
+        public async Task<IActionResult> GetResultCount(int id,[FromQuery] TestDetailParam param)
         {
-            var count = await _resultsService.GetResultCountAsync(id);
+            var count = await _resultsService.GetResultCountAsync(id,param);
 
             return Ok(count);
         }

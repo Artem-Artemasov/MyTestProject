@@ -13,33 +13,33 @@
     <!--Perfomance table-->
     <div class="perfomance-table">
       <h2 class="px-4 mt-5 w-50 mx-auto">Performance</h2>
-      <links-block :id="id" :enableTime="true"> </links-block>
+      <links-block :testId="testId" :enableTime="true"> </links-block>
     </div>
 
     <!--Not found at website-->
     <div class="links-block">
       <h3 class="px-4 mt-5 w-50 mx-auto">URLs NOT FOUND AT WEBSITE</h3>
-      <links-block :id="id" :inSitemap="true"> </links-block>
+      <links-block :testId="testId" :inSitemap="true"> </links-block>
     </div>
 
     <!--Not found at sitemap-->
     <div class="links-block">
       <h3 class="px-4 mt-5 w-50 mx-auto">URLs NOT FOUND AT SITEMAP</h3>
-      <links-block :id="id" :inHtml="true"> </links-block>
+      <links-block :testId="testId" :inHtml="true"> </links-block>
     </div>
 
   </div>
 </template>
 
 <script>
-  import LinksBlock from '../components/LinksBlock/LinksBlock.vue'
+  import LinksBlock from '../components/LinksBlock/linksBlock.vue'
 
   export default {
     name: 'Result',
 
     data() {
       return {
-        id : this.$router.currentRoute.params['id'],
+        testId : this.$router.currentRoute.params['id'],
       }
     },
 

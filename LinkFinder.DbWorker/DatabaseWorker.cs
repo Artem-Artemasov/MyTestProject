@@ -20,7 +20,7 @@ namespace LinkFinder.DbWorker
             _resultRepository = resultRepository;
         }
 
-        public async Task SaveAsync(string url, IEnumerable<Link> htmlLinks, IEnumerable<Link> sitemapLinks)
+        public async Task<Test> SaveTestAsync(string url, IEnumerable<Link> htmlLinks, IEnumerable<Link> sitemapLinks)
         {
             var test = new Test() { Url = url };
             await _testsRepository.AddAsync(test);
@@ -41,6 +41,8 @@ namespace LinkFinder.DbWorker
 
             _resultRepository.AddRange(allResults);
             await _resultRepository.SaveChangesAsync();
+
+            return test;
         }
 
         public async Task<IQueryable<Test>> GetTestsAsync()

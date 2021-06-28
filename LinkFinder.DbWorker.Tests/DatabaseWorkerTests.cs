@@ -27,7 +27,7 @@ namespace LinkFinder.DbWorker.Tests
         public void Save_CorrectInputUrl_ShouldAddIt()
         {
             //Act
-            dataSaver.SaveAsync("https://www.example.com", new List<Link>(),new List<Link>()).Wait();
+            dataSaver.SaveTestAsync("https://www.example.com", new List<Link>(),new List<Link>()).Wait();
 
             //Assert
             mockTestRepository.Verify(p => p.AddAsync(It.Is<Test>(p => p.Url == "https://www.example.com"), It.IsAny<CancellationToken>()), Times.Once);
@@ -40,7 +40,7 @@ namespace LinkFinder.DbWorker.Tests
             var inputList = new List<Link>() { new Link("https://example.com/books") };
 
             //Act
-            dataSaver.SaveAsync("https://www.example.com", inputList, inputList).Wait();
+            dataSaver.SaveTestAsync("https://www.example.com", inputList, inputList).Wait();
 
             //Assert
             mockResultRepository.Verify(p => p.AddRange(It.Is<IEnumerable<Result>>(f => f.Any(result => result.Url == "https://example.com/books"))));
@@ -54,7 +54,7 @@ namespace LinkFinder.DbWorker.Tests
             var inputList = new List<Link>() { new Link("https://example.com/books") };
 
             //Act
-            dataSaver.SaveAsync("https://www.example.com", inputList, inputList).Wait();
+            dataSaver.SaveTestAsync("https://www.example.com", inputList, inputList).Wait();
 
             //Assert
             mockResultRepository.Verify(p => p.AddRange(It.Is<IEnumerable<Result>>(f => f.Any(result => result.InSitemap && result.InHtml))));

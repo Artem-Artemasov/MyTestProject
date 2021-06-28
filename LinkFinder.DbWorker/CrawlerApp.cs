@@ -1,4 +1,5 @@
-﻿using LinkFinder.Logic;
+﻿using LinkFinder.DbWorker.Models;
+using LinkFinder.Logic;
 using LinkFinder.Logic.Crawlers;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace LinkFinder.DbWorker
             _dbWorker = dbWorker;
         }
 
-        public async Task StartWork(string url)
+        public async Task<Test> StartWork(string url)
         {
             var htmlLinks = _htmlCrawler.GetLinks(url);
             var sitemapLinks = _sitemapCrawler.GetLinks(url);
@@ -26,7 +27,7 @@ namespace LinkFinder.DbWorker
                                            .Concat(sitemapLinks)
                                            .ToList();
 
-            await _dbWorker.SaveAsync(url, htmlLinks, sitemapLinks);
+            return await _dbWorker.SaveTestAsync(url, htmlLinks, sitemapLinks);
         }
     }
 }

@@ -1,16 +1,16 @@
 import VueRouter from "vue-router";
-import Tests from './pages/Tests.vue';
-import Result from './pages/Result.vue';
+import TestsPage from './pages/TestsPage.vue';
+import ResultPage from './pages/ResultPage.vue';
 
 export default new VueRouter({
   routes: [
     {
       path: '',
-      component: Tests
+      component: TestsPage
     },
     {
       path: '/results/:id',
-      component: Result
+      component: ResultPage
     }
   ],
   mode: 'history',

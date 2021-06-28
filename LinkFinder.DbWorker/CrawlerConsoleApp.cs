@@ -30,7 +30,7 @@ namespace LinkFinder.DbWorker
 
             _linkPrinter.PrintAllInformation(htmlLinks, sitemapLinks);
 
-            _dbWorker.SaveAsync(inputUrl, htmlLinks, sitemapLinks).Wait();
+            _dbWorker.SaveTestAsync(inputUrl, htmlLinks, sitemapLinks).Wait();
 
             Environment.Exit(0);
         }

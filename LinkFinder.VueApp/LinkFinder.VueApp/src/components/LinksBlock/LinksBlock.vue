@@ -26,14 +26,14 @@
 </template>
 
 <script>
-  import Link from '../Link/Link.vue';
+  import Link from '../Link/link.vue';
 
   export default {
     name: 'linksBlock',
 
     props:
     {
-      id: "",
+      testId: "",
       enableTime: {
         default: false,
       },
@@ -64,7 +64,7 @@
       },
 
       downloadPerfomanceList(page) {
-        this.resource = this.$resource('test/' + this.id
+        this.resource = this.$resource('test/' + this.testId
                                                + "?Page=" + page
                                                + "&CountResultsOnPage=" + this.perPage
                                                + "&InHtml=" + this.inHtml
@@ -80,7 +80,7 @@
     created() {
       this.downloadPerfomanceList(1);
 
-      this.resource = this.$resource('test/' + this.id + '/count');
+      this.resource = this.$resource('test/' + this.testId + '/count');
 
       this.resource.get()
         .then(response => response.json())

@@ -1,9 +1,9 @@
 ﻿using LinkFinder.DbWorker;
-using LinkFinder.DbWorker.Models;
 using LinkFinder.Logic.Validators;
+using LinkFinder.WebApi.Filters;
+using LinkFinder.WebApi.Mappers;
 using LinkFinder.WebApi.Models;
 using LinkFinder.WebApi.RoutingParams;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,58 +15,51 @@ namespace LinkFinder.WebApi.Services
         private readonly DatabaseWorker _dbWorker;
         private readonly LinkValidator _linkValidator;
         private readonly CrawlerApp _crawlerApp;
-        private readonly ResultsService _resultsService;
+        private readonly ResultsFilter _resultsFilter;
 
-        public TestsService(CrawlerApp crawlerApp, LinkValidator linkValidator, DatabaseWorker dbWorker, ResultsService resultsService)
+        public TestsService(CrawlerApp crawlerApp, LinkValidator linkValidator, DatabaseWorker dbWorker, ResultsFilter resultsFilter)
         {
             _crawlerApp = crawlerApp;
             _linkValidator = linkValidator;
             _dbWorker = dbWorker;
-            _resultsService = resultsService;
+            _resultsFilter = resultsFilter;
         }
 
         public virtual async Task<IEnumerable<ApiTest>> GetAllTestsAsync()
         {
             var tests = await _dbWorker.GetTestsAsync();
 
-            return tests.Select(p => new ApiTest()
-            {
-                Id = p.Id,
-                Url = p.Url,
-                TimeCreated = p.TimeCreated,
-            });
+            tests = tests.OrderByDescending(p => p.TimeCreated);
+
+            return tests.Select(p => TestApiMapper.Map(p));
         }
 
-        public virtual async Task<string> AddTestAsync(string url)
+        public virtual async Task<ApiTest> AddTestAsync(string url)
         {
             if (_linkValidator.IsCorrectLink(url, out string errorMessage) == false)
             {
-                return errorMessage;
+                throw new System.Exception(errorMessage);
             }
 
-            await _crawlerApp.StartWork(url);
+            var createdTest = await _crawlerApp.StartWork(url);
 
-            return null;
+            return TestApiMapper.Map(createdTest);
         }
 
         public virtual async Task<ApiDetailTest> GetTestAsync(int testId, TestDetailParam param)
         {
-            var test = (await _dbWorker.GetTestsAsync()).FirstOrDefault(p => p.Id == testId);
+            var test = (await _dbWorker.GetTestsAsync())
+                                       .FirstOrDefault(p => p.Id == testId);
             
             //Get tests sorted it and get needed page
-            var testResults = (await _dbWorker.GetResultsAsync(test.Id)).OrderBy(p => p.TimeResponse).AsQueryable();
-            
-            //When need not all results
-            if (param.InHtml || param.InSitemap)
-            {
-                testResults = testResults.Where(p => p.InSitemap == param.InSitemap)
-                           .Where(p => p.InHtml == param.InHtml);
-            }
-            else
-            {
-                testResults =  testResults.Skip((param.Page - 1) * param.CountResultsOnPage)
+            var testResults = (await _dbWorker.GetResultsAsync(test.Id))
+                                              .OrderBy(p => p.TimeResponse)
+                                              .AsQueryable();
+
+            testResults = _resultsFilter.Filter(testResults, param);
+
+            testResults = testResults.Skip((param.Page - 1) * param.CountResultsOnPage)
                                           .Take(param.CountResultsOnPage);
-            }
 
             return new ApiDetailTest()
             {
@@ -76,6 +69,5 @@ namespace LinkFinder.WebApi.Services
                 Results = testResults.Select(p => ResultsService.MapApiResult(p)),
             };
         }
-
     }
 }
