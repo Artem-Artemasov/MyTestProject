@@ -76,6 +76,7 @@ namespace LinkFinder.WebApi.Controllers
         /// Return a count of results with test id
         /// </summary>
         /// <param name="id">Id of test which count results you want to get</param>
+        /// <param name="param">Results will be sought with that params</param>
         /// <returns></returns>
         [Route("/api/test/{id}/count")]
         [HttpGet]

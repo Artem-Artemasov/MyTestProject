@@ -1,9 +1,5 @@
 ﻿using LinkFinder.DbWorker.Models;
 using LinkFinder.WebApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace LinkFinder.WebApi.Mappers
 {

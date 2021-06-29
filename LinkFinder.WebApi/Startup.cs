@@ -1,4 +1,3 @@
-using LinkFinder.WebApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,10 +26,12 @@ namespace LinkFinder.WebApi
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo {
-                    Title = "LinkFinder.WebApi", 
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "LinkFinder.WebApi",
                     Description = ".NET Core WebApi application for crawling a website",
-                    Version = "v1" });
+                    Version = "v1"
+                });
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);

@@ -50,8 +50,8 @@ namespace LinkFinder.WebApi.Services
         {
             var test = (await _dbWorker.GetTestsAsync())
                                        .FirstOrDefault(p => p.Id == testId);
-            
-            //Get tests sorted it and get needed page
+
+            //Get results sorted it and get needed page
             var testResults = (await _dbWorker.GetResultsAsync(test.Id))
                                               .OrderBy(p => p.TimeResponse)
                                               .AsQueryable();

@@ -30,6 +30,8 @@
       </div>
       <!--End error section-->
     </form>
+
+   <!--Window that hide all content when site is crawled-->
     <hiding-window :isVisible="contentIsHidden"></hiding-window>
   </div>
 
