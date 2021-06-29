@@ -27,8 +27,8 @@ namespace LinkFinder.DbWorker
             await _testsRepository.SaveChangesAsync();
 
             var allLinks = htmlLinks.Except(sitemapLinks, (x, y) => x.Url == y.Url)
-                                           .Concat(sitemapLinks)
-                                           .ToList();
+                                           .Concat(sitemapLinks);
+
             //Create list of result object
             var allResults = allLinks.Select(p => new Result()
             {

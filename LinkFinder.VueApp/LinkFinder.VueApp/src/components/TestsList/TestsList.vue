@@ -9,6 +9,7 @@
       </div>
 
     </div>
+
   </div>
 </template>
 
@@ -18,9 +19,8 @@
     props:['dataTests'],
     data() {
       return {
-        tests: []
+        tests: [],
       }
     },
-
   }
 </script>

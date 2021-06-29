@@ -88,12 +88,12 @@
         this.resource.save(postedData)
           .then(response => {
             if (response.status === 400) {
-              this.errorMessage = badResponse.body.errorMessage[0];
+              this.errorMessage = badResponse.body.content.errorMessage;
               this.contentIsHidden = false;
             }
             else {
               response.json();
-              eventEmitter.$emit('testIsAdded', response.body);
+              eventEmitter.$emit('testIsAdded', response.body.content);
               this.contentIsHidden = false;
             }
           })

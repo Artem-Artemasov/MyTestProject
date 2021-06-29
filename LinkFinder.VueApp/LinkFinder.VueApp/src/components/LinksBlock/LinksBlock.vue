@@ -5,12 +5,12 @@
       <div v-if="!this.inSitemap && !this.inHtml" class="col-2  text-center">Time Response</div>
     </div>
 
-    <crawled-link v-for="result of testDetail.results"
-                  :url="result.url"
-                  :enableTime="enableTime"
-                  :timeResponse="result.timeResponse"
-                  :key="result.id">
-    </crawled-link>
+      <crawled-link v-for="result of testDetail.results"
+                    :url="result.url"
+                    :enableTime="enableTime"
+                    :timeResponse="result.timeResponse"
+                    :key="result.id">
+      </crawled-link>
 
     <div v-if="!this.inSitemap && !this.inHtml"
          class="pages w-50 justify-content-center align-items-center px-auto d-flex my-2 mx-auto">
@@ -73,7 +73,7 @@
 
         this.resource.get()
           .then(response => response.json())
-          .then(links => this.testDetail = links);
+          .then(links => this.testDetail = links.content);
       },
     },
 
@@ -84,8 +84,9 @@
 
       this.resource.get()
         .then(response => response.json())
-        .then(count => this.countResults = count.countResults)
+        .then(count => this.countResults = count.content.countResults)
     },
 
   }
 </script>
+

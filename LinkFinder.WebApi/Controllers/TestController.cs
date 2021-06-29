@@ -1,18 +1,18 @@
-﻿using LinkFinder.WebApi.RoutingParams;
-using LinkFinder.WebApi.Services;
+﻿using LinkFinder.WebApi.Services;
+using LinkFinder.WebApi.Services.Request;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 
 namespace LinkFinder.WebApi.Controllers
 {
     [ApiController]
-    public class TestsController : ControllerBase
+    [Route("api/[controller]")]
+    public class TestController : ControllerBase
     {
-        private readonly TestsService _testsService;
-        private readonly ResultsService _resultsService;
+        private readonly TestService _testsService;
+        private readonly ResultService _resultsService;
 
-        public TestsController(TestsService testsService, ResultsService resultsService)
+        public TestController(TestService testsService, ResultService resultsService)
         {
             _testsService = testsService;
             _resultsService = resultsService;
@@ -22,13 +22,12 @@ namespace LinkFinder.WebApi.Controllers
         /// Return all existing tests
         /// </summary>
         /// <returns></returns>
-        [Route("api/tests")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var apiTests = await _testsService.GetAllTestsAsync();
+            var response = await _testsService.GetAllTestsAsync();
 
-            return Ok(apiTests);
+            return Ok(response);
         }
 
         /// <summary>
@@ -37,13 +36,12 @@ namespace LinkFinder.WebApi.Controllers
         /// <param name="id"></param>
         /// <param name="param"></param>
         /// <returns></returns>
-        [Route("api/test/{id}")]
-        [HttpGet]
-        public async Task<IActionResult> GetTestResults(int id, [FromQuery] TestDetailParam param)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetTestResults(int id, [FromQuery] GetTestDetailParam param)
         {
-            var results = await _testsService.GetTestAsync(id, param);
+            var response = await _testsService.GetTestAsync(id, param);
 
-            return Ok(results);
+            return Ok(response);
         }
 
         /// <summary>
@@ -53,23 +51,17 @@ namespace LinkFinder.WebApi.Controllers
         /// <returns></returns>
         /// <response code="200">Website with input URL has been crawled</response>     
         /// <response code="400">When input URL not valid, return errorMessage </response>     
-        [Route("api/test")]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateTestParam param)
         {
-            try
-            {
-                var createdTest = await _testsService.AddTestAsync(param.Url);
+            var response = await _testsService.AddTestAsync(param.Url);
 
-                return Ok(createdTest);
-            }
-            catch(Exception e)
+            if (response.IsSuccessful == false)
             {
-                
-                ModelState.AddModelError("errorMessage", e.Message);
-
-                return BadRequest(ModelState);
+                return BadRequest(response);
             }
+
+            return Ok(response);
         }
 
         /// <summary>
@@ -78,13 +70,12 @@ namespace LinkFinder.WebApi.Controllers
         /// <param name="id">Id of test which count results you want to get</param>
         /// <param name="param">Results will be sought with that params</param>
         /// <returns></returns>
-        [Route("/api/test/{id}/count")]
-        [HttpGet]
-        public async Task<IActionResult> GetResultCount(int id,[FromQuery] TestDetailParam param)
+        [HttpGet("{id}/count")]
+        public async Task<IActionResult> GetResultCount(int id, [FromQuery] GetTestDetailParam param)
         {
-            var count = await _resultsService.GetResultCountAsync(id,param);
+            var response = await _resultsService.GetResultCountAsync(id, param);
 
-            return Ok(count);
+            return Ok(response);
         }
     }
 }

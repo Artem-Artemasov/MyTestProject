@@ -1,6 +1,6 @@
-﻿namespace LinkFinder.WebApi.Models
+﻿namespace LinkFinder.WebApi.Services.Response
 {
-    public class ApiResultCount
+    public class ResultCountDto
     {
         /// <summary>
         /// Count of results

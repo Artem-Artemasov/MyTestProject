@@ -1,4 +1,4 @@
-﻿namespace LinkFinder.WebApi.RoutingParams
+﻿namespace LinkFinder.WebApi.Services.Request
 {
     public class CreateTestParam
     {

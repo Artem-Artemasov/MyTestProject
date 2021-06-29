@@ -1,6 +1,6 @@
-﻿namespace LinkFinder.WebApi.RoutingParams
-{
-    public class TestDetailParam
+﻿namespace LinkFinder.WebApi.Services.Request 
+{ 
+    public class GetTestDetailParam
     {
         /// <summary>
         /// True when URL exist in sitemap. Can be unset. 

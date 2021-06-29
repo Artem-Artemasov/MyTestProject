@@ -2,22 +2,22 @@
   <div class="py-4">
     <url-input-form></url-input-form>
 
-      <!--Render tests list-->
-      <div class="tests text-center">
-        <h2 class="caption py-2">Test results</h2>
-        <div class="container rounded m-auto bg-light">
+    <!--Render tests list-->
+    <div class="tests text-center">
+      <h2 class="caption py-2">Test results</h2>
+      <div class="container rounded m-auto bg-light">
 
-          <div class="row py-3 border">
-            <div class="col-6 url border-right">Website</div>
-            <div class="col-3 date border-right">Date</div>
-          </div>
-
-          <tests-list :dataTests="tests"></tests-list>
-
+        <div class="row py-3 border">
+          <div class="col-6 url border-right">Website</div>
+          <div class="col-3 date border-right">Date</div>
         </div>
-      </div>
 
-</div>
+        <tests-list :dataTests="tests"></tests-list>
+
+      </div>
+    </div>
+
+  </div>
 </template>
 
 <script>
@@ -51,11 +51,11 @@
     methods: {
 
       downloadTests(){
-        this.resource = this.$resource('tests');
+        this.resource = this.$resource('test');
         
         this.tests = this.resource.get()
           .then(response => response.json())
-          .then(tests => this.tests = tests);
+          .then(tests => this.tests = tests.content);
       },
 
     },

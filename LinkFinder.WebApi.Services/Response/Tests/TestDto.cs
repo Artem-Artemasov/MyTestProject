@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace LinkFinder.WebApi.Models
+namespace LinkFinder.WebApi.Services.Response
 {
-    public class ApiTest
+    public class TestDto
     {
         public int Id { get; set; }
         public string Url { get; set; }

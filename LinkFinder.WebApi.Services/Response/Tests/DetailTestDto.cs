@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LinkFinder.WebApi.Models
+namespace LinkFinder.WebApi.Services.Response
 {
-    public class ApiDetailTest
+    public class DetailTestDto
     {
         public int Id { get; set; }
         public string Url { get; set; }
         public DateTime TimeCreated { get; set; }
-        public IEnumerable<ApiResult> Results { get; set; }
+        public IEnumerable<ResultDto> Results { get; set; }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using LinkFinder.DbWorker.Models;
-using LinkFinder.WebApi.RoutingParams;
+using LinkFinder.WebApi.Services.Request;
 using System.Linq;
 
-namespace LinkFinder.WebApi.Filters
+namespace LinkFinder.WebApi.Services.Filters
 {
-    public class ResultsFilter
+    public class ResultFilter
     {
-        public virtual IQueryable<Result> Filter(IQueryable<Result> results, TestDetailParam param)
+        public virtual IQueryable<Result> Filter(IQueryable<Result> results, GetTestDetailParam param)
         {
             if (param.InHtml || param.InSitemap)
             {

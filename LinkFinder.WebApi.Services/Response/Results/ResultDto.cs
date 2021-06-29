@@ -1,6 +1,6 @@
-﻿namespace LinkFinder.WebApi.Models
+﻿namespace LinkFinder.WebApi.Services.Response
 {
-    public class ApiResult
+    public class ResultDto
     {
         public int Id { get; set; }
         public string Url { get; set; }
