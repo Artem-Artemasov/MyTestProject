@@ -37,6 +37,7 @@
     width:100vw;
     height:100vh;
     background-color:gray;
+    z-index:99999;
   }
 
   .spinner{

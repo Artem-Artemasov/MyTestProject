@@ -42,6 +42,7 @@
     <Folder Include="LinkFinder.VueApp\src\components\Link\" />
     <Folder Include="LinkFinder.VueApp\src\components\LinksBlock\" />
     <Folder Include="LinkFinder.VueApp\src\components\HidingWindow\" />
+    <Folder Include="LinkFinder.VueApp\src\components\UrlInputForm\" />
     <Folder Include="LinkFinder.VueApp\src\components\TestsList\" />
     <Folder Include="LinkFinder.VueApp\src\pages\" />
   </ItemGroup>
@@ -63,6 +64,9 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="LinkFinder.VueApp\src\components\TestsList\testsList.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="LinkFinder.VueApp\src\components\UrlInputForm\urlInputForm.vue">
       <SubType>Code</SubType>
     </Content>
     <Content Include="LinkFinder.VueApp\src\pages\ResultPage.vue">

@@ -13,7 +13,7 @@ namespace LinkFinder.WebApi
     {
         public static void AddApplicationServices(this IServiceCollection services)
         {
-            services.AddEfRepository<LinkFinderDbContext>(options => options.UseSqlServer(@"Server=DESKTOP-ACD27RC\LOCALDB; Database=LinkFinder;User ID=user_sql;Password=q1w2e3r4"));
+            services.AddEfRepository<LinkFinderDbContext>(options => options.UseSqlServer(@"Server=DESKTOP-BFO0R26; Database=LinkFinder;User ID=user_sql;Password=q1w2e3r4"));
             services.AddScoped<DatabaseWorker>();
             services.AddScoped<LinkParser>();
             services.AddScoped<LinkConverter>();

@@ -29,6 +29,12 @@ namespace LinkFinder.WebApi.Services
             };
         }
 
+        /// <summary>
+        /// Return count of results with test id.
+        /// </summary>
+        /// <param name="testId"></param>
+        /// <param name="param"></param>
+        /// <returns></returns>
         public virtual async Task<ApiResultCount> GetResultCountAsync(int testId, TestDetailParam param)
         {
             var results = (await _dbWorker.GetResultsAsync(testId));
