@@ -20,7 +20,7 @@ namespace LinkFinder.DbWorker
             _resultRepository = resultRepository;
         }
 
-        public async Task<Test> SaveTestAsync(string url, IEnumerable<Link> htmlLinks, IEnumerable<Link> sitemapLinks)
+        public virtual async Task<Test> SaveTestAsync(string url, IEnumerable<Link> htmlLinks, IEnumerable<Link> sitemapLinks)
         {
             var test = new Test() { Url = url };
             await _testsRepository.AddAsync(test);
@@ -45,12 +45,12 @@ namespace LinkFinder.DbWorker
             return test;
         }
 
-        public async Task<IQueryable<Test>> GetTestsAsync()
+        public virtual async Task<IQueryable<Test>> GetTestsAsync()
         {
             return _testsRepository.GetAll();
         }
 
-        public async Task<IQueryable<Result>> GetResultsAsync(int testId)
+        public virtual async Task<IQueryable<Result>> GetResultsAsync(int testId)
         {
             return _resultRepository.GetAll().Where(p => p.TestId == testId);
         }

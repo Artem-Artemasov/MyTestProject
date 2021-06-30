@@ -1,5 +1,6 @@
-﻿using LinkFinder.WebApi.Services;
-using LinkFinder.WebApi.Services.Request;
+﻿using LinkFinder.WebApi.Logic.Helpers;
+using LinkFinder.WebApi.Logic.Request;
+using LinkFinder.WebApi.Logic.Response.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -25,9 +26,9 @@ namespace LinkFinder.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var response = await _testsService.GetAllTestsAsync();
+            var result = await _testsService.GetAllTestsAsync();
 
-            return Ok(response);
+            return Ok(ResponseHelper.CreateResponseObj(result));
         }
 
         /// <summary>
@@ -39,9 +40,9 @@ namespace LinkFinder.WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTestResults(int id, [FromQuery] GetTestDetailParam param)
         {
-            var response = await _testsService.GetTestAsync(id, param);
+            var result = await _testsService.GetTestAsync(id, param);
 
-            return Ok(response);
+            return Ok(ResponseHelper.CreateResponseObj(result));
         }
 
         /// <summary>
@@ -54,14 +55,9 @@ namespace LinkFinder.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateTestParam param)
         {
-            var response = await _testsService.AddTestAsync(param.Url);
+            var result = await _testsService.AddTestAsync(param.Url);
 
-            if (response.IsSuccessful == false)
-            {
-                return BadRequest(response);
-            }
-
-            return Ok(response);
+            return Ok(ResponseHelper.CreateResponseObj(result));
         }
 
         /// <summary>
@@ -73,9 +69,9 @@ namespace LinkFinder.WebApi.Controllers
         [HttpGet("{id}/count")]
         public async Task<IActionResult> GetResultCount(int id, [FromQuery] GetTestDetailParam param)
         {
-            var response = await _resultsService.GetResultCountAsync(id, param);
+            var result = await _resultsService.GetResultCountAsync(id, param);
 
-            return Ok(response);
+            return Ok(ResponseHelper.CreateResponseObj(result));
         }
     }
 }

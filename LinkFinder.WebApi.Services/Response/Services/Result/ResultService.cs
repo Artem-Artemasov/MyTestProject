@@ -1,11 +1,10 @@
 ﻿using LinkFinder.DbWorker;
-using LinkFinder.WebApi.Services.Filters;
-using LinkFinder.WebApi.Services.Request;
-using LinkFinder.WebApi.Services.Response;
+using LinkFinder.WebApi.Logic.Filters;
+using LinkFinder.WebApi.Logic.Request;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LinkFinder.WebApi.Services
+namespace LinkFinder.WebApi.Logic.Response.Services
 {
     public class ResultService
     {
@@ -24,16 +23,13 @@ namespace LinkFinder.WebApi.Services
         /// <param name="testId"></param>
         /// <param name="param"></param>
         /// <returns></returns>
-        public virtual async Task<ResponseMessage> GetResultCountAsync(int testId, GetTestDetailParam param)
+        public virtual async Task<ResultCountDto> GetResultCountAsync(int testId, GetTestDetailParam param)
         {
             var results = (await _dbWorker.GetResultsAsync(testId));
 
             results = _resultFilter.Filter(results, param);
 
-            return new ResponseMessage()
-            {
-                Content = new ResultCountDto() { CountResults = results.Count() },
-            };
+            return new ResultCountDto() { CountResults = results.Count() };
         }
 
     }

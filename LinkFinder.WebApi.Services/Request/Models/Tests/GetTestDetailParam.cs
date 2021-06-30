@@ -1,4 +1,7 @@
-﻿namespace LinkFinder.WebApi.Services.Request 
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
+
+namespace LinkFinder.WebApi.Logic.Request 
 { 
     public class GetTestDetailParam
     {
@@ -16,7 +19,7 @@
         /// Page that needed
         /// By default = 1
         /// </summary>
-        public int Page { get; set; } = 0;
+        public int Page { get; set; } = 1;
         /// <summary>
         /// Count of results on all pages
         /// By default = 10 items

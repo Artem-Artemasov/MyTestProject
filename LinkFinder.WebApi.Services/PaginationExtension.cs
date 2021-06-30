@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace LinkFinder.WebApi.Services
+namespace LinkFinder.WebApi.Logic
 {
     public static class PaginationExtension
     {

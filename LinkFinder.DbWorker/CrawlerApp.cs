@@ -1,4 +1,5 @@
-﻿using LinkFinder.DbWorker.Models;
+﻿using LinkFinder.DbWorker.Interfaces;
+using LinkFinder.DbWorker.Models;
 using LinkFinder.Logic;
 using LinkFinder.Logic.Crawlers;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LinkFinder.DbWorker
 {
-    public class CrawlerApp
+    public class CrawlerApp : ICrawlerApp
     {
         private readonly HtmlCrawler _htmlCrawler;
         private readonly SitemapCrawler _sitemapCrawler;

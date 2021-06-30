@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LinkFinder.DbWorker\LinkFinder.DbWorker.csproj" />
-    <ProjectReference Include="..\LinkFinder.WebApi.Services\LinkFinder.WebApi.Services.csproj" />
+    <ProjectReference Include="..\LinkFinder.WebApi.Services\LinkFinder.WebApi.Logic.csproj" />
     <ProjectReference Include="..\LinkFinder\LinkFinder.Logic.csproj" />
   </ItemGroup>
 </Project>

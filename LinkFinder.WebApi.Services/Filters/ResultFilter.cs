@@ -1,8 +1,8 @@
 ﻿using LinkFinder.DbWorker.Models;
-using LinkFinder.WebApi.Services.Request;
+using LinkFinder.WebApi.Logic.Request;
 using System.Linq;
 
-namespace LinkFinder.WebApi.Services.Filters
+namespace LinkFinder.WebApi.Logic.Filters
 {
     public class ResultFilter
     {

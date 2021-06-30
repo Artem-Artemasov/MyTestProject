@@ -4,10 +4,9 @@ using LinkFinder.Logic.Validators;
 using LinkFinder.Logic.Models;
 using LinkFinder.Logic.Services;
 
-
 namespace LinkFinder.Logic.Crawlers
 {
-    public class HtmlCrawler 
+    public class HtmlCrawler
     {
         private readonly LinkParser _linkParser;
         private readonly LinkValidator _linkValidator;

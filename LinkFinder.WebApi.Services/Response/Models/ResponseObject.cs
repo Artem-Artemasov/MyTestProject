@@ -1,6 +1,6 @@
-﻿namespace LinkFinder.WebApi.Services.Response
+﻿namespace LinkFinder.WebApi.Logic.Response.Models
 {
-    public class ResponseMessage
+    public class ResponseObject
     {
         public bool IsSuccessful { get; set; } = true;
         public object Content { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace LinkFinder.WebApi.Services.Response
+﻿namespace LinkFinder.WebApi.Logic.Response
 {
     public class ResultDto
     {

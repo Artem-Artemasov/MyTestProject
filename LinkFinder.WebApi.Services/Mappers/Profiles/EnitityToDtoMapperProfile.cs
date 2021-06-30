@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using LinkFinder.DbWorker.Models;
-using LinkFinder.WebApi.Services.Response;
+using LinkFinder.WebApi.Logic.Response;
 
-namespace LinkFinder.WebApi.Services.Mappers.Profiles
+namespace LinkFinder.WebApi.Logic.Mappers.Profiles
 {
     public class EnitityToDtoMapperProfile : Profile
     {

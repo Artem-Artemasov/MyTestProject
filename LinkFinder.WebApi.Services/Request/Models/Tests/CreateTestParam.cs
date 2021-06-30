@@ -1,4 +1,6 @@
-﻿namespace LinkFinder.WebApi.Services.Request
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace LinkFinder.WebApi.Logic.Request
 {
     public class CreateTestParam
     {

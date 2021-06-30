@@ -88,7 +88,7 @@
         this.resource.save(postedData)
           .then(response => {
             if (response.status === 400) {
-              this.errorMessage = badResponse.body.content.errorMessage;
+              this.errorMessage = badResponse.body.content[0].errorMessage;
               this.contentIsHidden = false;
             }
             else {

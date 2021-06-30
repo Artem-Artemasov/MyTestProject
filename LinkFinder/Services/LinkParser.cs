@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using System.Net.Http;
-using LinkFinder.Logic.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace LinkFinder.Logic.Services
 {
@@ -27,7 +24,7 @@ namespace LinkFinder.Logic.Services
                     int indexOfEndTag = message.IndexOf(currentTags.Value, indexOfStartTag + currentTags.Key.Length);
                     if (indexOfEndTag == -1) //not found end tag
                     {
-                        indexOfEndTag = message.IndexOf(" ",indexOfStartTag);
+                        indexOfEndTag = message.IndexOf(" ", indexOfStartTag);
                     }
 
                     urls.Add(message[(indexOfStartTag + currentTags.Key.Length)..indexOfEndTag]);

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LinkFinder.WebApi.Services.Response
+namespace LinkFinder.WebApi.Logic.Response
 {
     public class DetailTestDto
     {
