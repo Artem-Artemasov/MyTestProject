@@ -104,10 +104,10 @@ namespace LinkFinder.Logic.Tests
                               .Returns(new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.BadRequest });
 
             mockRequestService.SetupSequence(p => p.DownloadPage(It.IsAny<Link>()))
-                             .Returns("");
+                              .Returns("");
 
             mockLinkConverter.Setup(p => p.RelativeToAbsolute(It.IsAny<IEnumerable<string>>(), It.IsAny<string>()))
-                 .Returns(new List<string> { });
+                             .Returns(new List<string> { });
 
             HtmlCrawler htmlCrawler = new HtmlCrawler(mockRequestService.Object, mockLinkConverter.Object, mockLinkParser.Object, mockLinkValidator.Object);
 
