@@ -13,7 +13,7 @@
     <!--Perfomance table-->
     <div class="perfomance-table">
       <h2 class="px-4 mt-5 w-50 mx-auto">Performance</h2>
-      <links-block :testId="testId" :enableTime="true"> </links-block>
+      <links-block :testId="testId" :enableTime="true" :inSitemap="true" :inHtml="true"> </links-block>
     </div>
 
     <!--Not found at website-->

@@ -2,7 +2,7 @@
 using LinkFinder.DbWorker;
 using LinkFinder.DbWorker.Interfaces;
 using LinkFinder.Logic.Validators;
-using LinkFinder.WebApi.Logic.Errors;
+using LinkFinder.WebApi.Logic.Exceptions;
 using LinkFinder.WebApi.Logic.Filters;
 using LinkFinder.WebApi.Logic.Request;
 using System.Collections.Generic;
@@ -34,9 +34,8 @@ namespace LinkFinder.WebApi.Logic.Response.Services
 
         public virtual async Task<IEnumerable<TestDto>> GetAllTestsAsync()
         {
-            var tests = await _dbWorker.GetTestsAsync();
-
-            tests = tests.OrderByDescending(p => p.TimeCreated);
+            var tests = (await _dbWorker.GetTestsAsync())
+                                        .OrderByDescending(p => p.TimeCreated);
 
             return _mapper.Map<IEnumerable<TestDto>>(tests);
         }
@@ -56,7 +55,12 @@ namespace LinkFinder.WebApi.Logic.Response.Services
         public virtual async Task<DetailTestDto> GetTestAsync(int testId, GetTestDetailParam param)
         {
             var test = (await _dbWorker.GetTestsAsync())
-                                       .First(p => p.Id == testId);
+                                       .FirstOrDefault(p => p.Id == testId);
+
+            if (null == test)
+            {
+                throw new ObjectNotFoundException($"Test with id = {testId} not founded");
+            }
 
             //Get results sorted it and get needed page
             var testResults = (await _dbWorker.GetResultsAsync(test.Id))
@@ -65,7 +69,7 @@ namespace LinkFinder.WebApi.Logic.Response.Services
 
             testResults = _resultFilter.Filter(testResults, param);
 
-            test.Results = testResults.Pagination(param.Page - 1, param.CountResultsOnPage).ToList();
+            test.Results = testResults.Pagination(param.Page, param.CountResultsOnPage).ToList();
 
             return _mapper.Map<DetailTestDto>(test);
         }

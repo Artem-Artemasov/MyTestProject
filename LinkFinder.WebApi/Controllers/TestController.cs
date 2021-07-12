@@ -37,6 +37,7 @@ namespace LinkFinder.WebApi.Controllers
         /// <param name="id"></param>
         /// <param name="param"></param>
         /// <returns></returns>
+        /// <response code="404">Test with input id not found, return the exception message</response>   
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTestResults(int id, [FromQuery] GetTestDetailParam param)
         {

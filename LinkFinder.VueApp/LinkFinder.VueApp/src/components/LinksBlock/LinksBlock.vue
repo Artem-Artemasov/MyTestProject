@@ -12,8 +12,9 @@
                     :key="result.id">
       </crawled-link>
 
-    <div v-if="!this.inSitemap && !this.inHtml"
+    <div v-if="this.inSitemap && this.inHtml"
          class="pages w-50 justify-content-center align-items-center px-auto d-flex my-2 mx-auto">
+
       <b-pagination v-model="currentPage"
                     :total-rows="countResults"
                     :per-page="perPage"
@@ -35,12 +36,15 @@
     {
       testId: "",
       enableTime: {
+        type: Boolean,
         default: false,
       },
       inSitemap: {
+        type: Boolean,
         default: false,
       },
       inHtml: {
+        type: Boolean,
         default: false,
       },
     },
@@ -73,7 +77,8 @@
 
         this.resource.get()
           .then(response => response.json())
-          .then(links => this.testDetail = links.content);
+          .then(links => this.testDetail = links.content)
+          .catch(badResponse => { });
       },
     },
 
@@ -85,6 +90,7 @@
       this.resource.get()
         .then(response => response.json())
         .then(count => this.countResults = count.content.countResults)
+        .catch(badResponse => { });
     },
 
   }

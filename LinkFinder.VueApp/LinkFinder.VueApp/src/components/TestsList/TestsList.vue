@@ -27,11 +27,8 @@
 
     data() {
       return {
-        tests:[],
         currentPage: 1,
         countOnPage: 10,
-        startIndexOfData: 0,
-        endIndexOfData: 0,
       }
     },
 
@@ -41,9 +38,9 @@
       },
 
       getTests: function (){
-        this.startIndexOfData = (this.currentPage - 1) * this.countOnPage;
-        this.endIndexOfData = this.currentPage * this.countOnPage;
-        return this.tests = Array.from(this.dataTests).slice(this.startIndexOfData, this.endIndexOfData);
+        const startIndexOfData = (this.currentPage - 1) * this.countOnPage;
+        const endIndexOfData = this.currentPage * this.countOnPage;
+        return Array.from(this.dataTests).slice(startIndexOfData, endIndexOfData);
       },
 
     },

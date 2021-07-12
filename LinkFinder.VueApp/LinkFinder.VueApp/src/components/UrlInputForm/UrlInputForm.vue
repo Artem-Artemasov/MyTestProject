@@ -38,14 +38,19 @@
 </template>
 
 <script>
-  import { eventEmitter } from '../../main'
   import { required, url } from 'vuelidate/lib/validators'
   import HidingWindow from '../../components/HidingWindow/hidingWindow.vue'
 
   export default {
-    name : 'urlInputForm',
+    name: 'urlInputForm',
     components: {
       'hiding-window': HidingWindow,
+    },
+
+    props: {
+      onTestAdded: {
+        type: Function,
+      },
     },
 
     data() {
@@ -69,9 +74,7 @@
 
         if (this.$v.$invalid === false) {
           this.contentIsHidden = true;
-
           this.postNewTest();
-
           this.inputSiteUrl = "";
 
           this.$v.$reset();
@@ -91,16 +94,14 @@
               this.errorMessage = badResponse.body.content[0].errorMessage;
               this.contentIsHidden = false;
             }
-            else {
+            else { //good response
               response.json();
-              eventEmitter.$emit('testIsAdded', response.body.content);
+              this.onTestAdded(response.body.content); 
               this.contentIsHidden = false;
             }
           })
 
       },
-
     }
-
   }
 </script>

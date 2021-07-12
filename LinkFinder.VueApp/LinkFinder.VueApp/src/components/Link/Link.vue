@@ -8,6 +8,19 @@
 <script>
   export default {
     name: 'crawled-link',
-    props:['url','timeResponse','enableTime'],
+    props: {
+      url: {
+        type: String,
+        default: ""
+      },
+      timeResponse: {
+        type: Number,
+        default: 0,
+      },
+      enableTime: {
+        type: Boolean,
+        default: false,
+      }, 
+    },
   }
 </script>

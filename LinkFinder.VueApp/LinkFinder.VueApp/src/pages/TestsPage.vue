@@ -1,6 +1,6 @@
 <template>
   <div class="py-4">
-    <url-input-form></url-input-form>
+    <url-input-form :onTestAdded="concatTest"></url-input-form>
 
     <!--Render tests list-->
     <div class="tests text-center">
@@ -23,7 +23,6 @@
 <script>
   import TestsList from '../components/TestsList/testsList.vue'
   import UrlInputForm from '../components/UrlInputForm/urlInputForm.vue'
-  import { eventEmitter } from '../main'
 
   export default {
     name: 'Tests',
@@ -41,21 +40,20 @@
 
     created() {
       this.downloadTests();
-
-      eventEmitter.$on('testIsAdded', (test) => {
-        this.tests.unshift(test);
-      })
-
     },
 
     methods: {
+      concatTest(test) {
+        this.tests.unshift(test);
+      },
 
       downloadTests(){
         this.resource = this.$resource('test');
         
         this.tests = this.resource.get()
           .then(response => response.json())
-          .then(tests => this.tests = tests.content);
+          .then(tests => this.tests = tests.content)
+          .catch(badResponse => { });
       },
 
     },

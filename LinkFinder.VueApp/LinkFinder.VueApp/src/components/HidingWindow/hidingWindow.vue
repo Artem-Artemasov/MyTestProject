@@ -23,6 +23,7 @@
     props:
     {
       isVisible: {
+        type: Boolean,
         default: false,
       },
     }

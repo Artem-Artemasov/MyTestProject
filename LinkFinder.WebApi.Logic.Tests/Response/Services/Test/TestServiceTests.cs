@@ -3,17 +3,12 @@ using LinkFinder.DbWorker;
 using LinkFinder.DbWorker.Interfaces;
 using LinkFinder.DbWorker.Models;
 using LinkFinder.Logic.Validators;
-using LinkFinder.WebApi.Logic.Errors;
+using LinkFinder.WebApi.Logic.Exceptions;
 using LinkFinder.WebApi.Logic.Filters;
 using LinkFinder.WebApi.Logic.Response.Services;
 using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LinkFinder.WebApi.Logic.Tests.Response.Services
 {

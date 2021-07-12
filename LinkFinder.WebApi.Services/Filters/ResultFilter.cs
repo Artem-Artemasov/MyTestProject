@@ -8,10 +8,10 @@ namespace LinkFinder.WebApi.Logic.Filters
     {
         public virtual IQueryable<Result> Filter(IQueryable<Result> results, GetTestDetailParam param)
         {
-            if (param.InHtml || param.InSitemap)
+            if (null != param.InHtml && null != param.InSitemap)
             {
-                results = results.Where(p => p.InSitemap == param.InSitemap)
-                                 .Where(p => p.InHtml == param.InHtml);
+                results = results.Where(p => p.InSitemap == param.InSitemap.Value)
+                                .Where(p => p.InHtml == param.InHtml.Value);
             }
 
             return results;

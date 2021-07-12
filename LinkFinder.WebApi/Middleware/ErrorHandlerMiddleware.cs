@@ -1,6 +1,8 @@
-﻿using LinkFinder.WebApi.Logic.Errors;
-using LinkFinder.WebApi.Logic.Response.Models.Errors;
+﻿using LinkFinder.WebApi.Logic.Exceptions;
+using LinkFinder.WebApi.Logic.Response.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -11,62 +13,69 @@ namespace LinkFinder.WebApi.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly JsonSerializerOptions jsonSerializerOptions;
+        private readonly IWebHostEnvironment _environment;
 
-        public ErrorHandlerMiddleware(RequestDelegate next)
+        public ErrorHandlerMiddleware(RequestDelegate next, IWebHostEnvironment env)
         {
             _next = next;
 
             jsonSerializerOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                IgnoreNullValues = true,
             };
+
+            _environment = env;
         }
 
         public async Task Invoke(HttpContext context)
         {
-
             try
             {
                 await _next(context);
             }
             catch (InvalidInputUrlException e)
             {
-                context.Response.StatusCode = 400;
-                context.Response.ContentType = "application/json";
-
-                var errorModel = new ErrorResponse("InvalidInputUrl", e.Message);
-
-                var serialized = JsonSerializer.Serialize(errorModel, jsonSerializerOptions);
-
-                await context.Response.WriteAsync(serialized);
+                await AddExceptionToResponse(400, e, context);
             }
-            catch (InvalidOperationException e)
+            catch (ObjectNotFoundException e)
             {
-                context.Response.ContentType = "application/json";
-                context.Response.StatusCode = 400;
-
-                var errorModel = new ErrorResponse("InvalidInputUrl", e.Message);
-
-                if (e.Message == "Sequence contains no elements")
-                {
-                    errorModel.ErrorMessage = "Not found request item";
-                }
-
-                var serialized = JsonSerializer.Serialize(errorModel, jsonSerializerOptions);
-                await context.Response.WriteAsync(serialized);
+                await AddExceptionToResponse(404, e, context);
             }
             catch (Exception e)
             {
-                context.Response.ContentType = "application/json";
-                context.Response.StatusCode = 500;
+                await AddExceptionToResponse(500, e, context);
+            }
+        }
 
-                var errorModel = new ErrorResponse("InvalidInputUrl", e.Message);
+        private async Task AddExceptionToResponse(int statusCode, Exception exception, HttpContext context)
+        {
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = statusCode;
 
-                var serialized = JsonSerializer.Serialize(errorModel, jsonSerializerOptions);
+            var errorModel = new ResponseObject()
+            {
+                IsSuccessful = false,
+                Errors = exception.ToString() + exception.Message,
+            };
 
-                await context.Response.WriteAsync(serialized);
+            if (_environment.IsDevelopment())
+            {
+                errorModel = await AddEnviromentInfo(exception, errorModel);
             }
 
+            var serialized = JsonSerializer.Serialize(errorModel, jsonSerializerOptions);
+
+            await context.Response.WriteAsync(serialized);
+
+
+        }
+
+        private async Task<ResponseObject> AddEnviromentInfo(Exception exception, ResponseObject responseObject)
+        {
+            responseObject.Errors += exception.StackTrace;
+
+            return responseObject;
         }
     }
 }

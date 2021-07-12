@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace LinkFinder.WebApi.Logic.Errors
+namespace LinkFinder.WebApi.Logic.Exceptions
 {
     public class InvalidInputUrlException : Exception
     {
