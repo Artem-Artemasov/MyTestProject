@@ -5,6 +5,7 @@ using LinkFinder.Logic.Validators;
 using LinkFinder.WebApp.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace LinkFinder.WebApp
 {
@@ -12,7 +13,7 @@ namespace LinkFinder.WebApp
     {
         public static void AddApplicationServices(this IServiceCollection services)
         {
-            services.AddEfRepository<LinkFinderDbContext>(options => options.UseSqlServer(@"Server=DESKTOP-BFO0R26; Database=LinkFinder; Trusted_Connection=True"));
+            services.AddEfRepository<LinkFinderDbContext>(options => options.UseSqlServer(Environment.GetEnvironmentVariable("DbConnection")));
             services.AddScoped<DatabaseWorker>();
             services.AddScoped<LinkParser>();
             services.AddScoped<LinkConverter>();
