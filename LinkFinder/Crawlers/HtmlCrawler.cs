@@ -26,24 +26,18 @@ namespace LinkFinder.Logic.Crawlers
             var storage = new List<Link>();
 
             if (_linkValidator.IsCorrectLink(baseUrl,out string errorMessage) == false)
-            {
                 return storage;
-            }
 
-            if (baseUrl.EndsWith('/') == false)
-            {
+                if (baseUrl.EndsWith('/') == false)
                 baseUrl += '/';
-            }
 
             if (_requestService.SendRequest(baseUrl,out int time).IsSuccessStatusCode == false)
-            {
                 return storage;
-            }
 
             storage.Add(new Link(baseUrl));
             storage = AnalyzeLink(storage.First(), storage).ToList();
 
-            return storage.OrderBy(p=>p.TimeResponse);
+            return storage.OrderBy(p => p.TimeResponse);
         }
 
         private IEnumerable<Link> AnalyzeLink(Link currentPage, List<Link> existingLinks)
@@ -56,7 +50,7 @@ namespace LinkFinder.Logic.Crawlers
                                .Select(p => new Link(p))
                                .ToList();
 
-            foundedLinks = NormalizeLink(foundedLinks, existingLinks.FirstOrDefault().Url)
+            foundedLinks = NormalizeLink(foundedLinks, existingLinks.FirstOrDefault()?.Url)
                            .Except(existingLinks, (x, y) => x.Url == y.Url)
                            .ToList();
 

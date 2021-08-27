@@ -1,5 +1,4 @@
-﻿using LinkFinder.ConsoleOutput;
-using LinkFinder.Logic.Crawlers;
+﻿using LinkFinder.Logic.Crawlers;
 using LinkFinder.Logic.Services;
 using LinkFinder.Logic.Validators;
 using Microsoft.EntityFrameworkCore;
@@ -33,8 +32,6 @@ namespace LinkFinder.DbWorker
                 services.AddScoped<LinkValidator>();
                 services.AddScoped<HtmlCrawler>();
                 services.AddScoped<SitemapCrawler>();
-                services.AddScoped<ConsoleWritter>();
-                services.AddScoped<LinkPrinter>();
             })
             .ConfigureLogging(options => options.SetMinimumLevel(LogLevel.Error));
     }

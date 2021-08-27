@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LinkFinderConsoleOutput\LinkFinder.ConsoleOutput.csproj" />
     <ProjectReference Include="..\LinkFinder\LinkFinder.Logic.csproj" />
   </ItemGroup>
 
