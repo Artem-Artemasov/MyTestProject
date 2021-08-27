@@ -1,0 +1,10 @@
+﻿@model IEnumerable<LinkFinder.DbWorker.Models.Result>
+ <div class="container w-100 m-auto border" style="min-height:100px;">
+     <div class="row border-bottom p-3 m-1 pl-5"> Url</div>
+    @foreach(var result in Model)
+    { 
+        <div class="row border-bottom p-3 m-1 pl-5">
+            <label>@result.Url</label>
+        </div>
+    }
+</div>

@@ -1,0 +1,123 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <Name>LinkFinder.VueApp</Name>
+    <RootNamespace>LinkFinder.VueApp</RootNamespace>
+    <SaveNodeJsSettingsInProjectFile>True</SaveNodeJsSettingsInProjectFile>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>c1030279-5f28-431f-8828-f431b8e25f75</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>node_modules\@vue\cli-service\bin\vue-cli-service.js</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <NodejsPort>1337</NodejsPort>
+    <StartWebBrowser>True</StartWebBrowser>
+    <ScriptArguments>serve</ScriptArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+      npm run build
+    </PostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="LinkFinder.VueApp\" />
+    <Folder Include="LinkFinder.VueApp\src\" />
+    <Folder Include="LinkFinder.VueApp\src\assets\" />
+    <Folder Include="LinkFinder.VueApp\src\components\" />
+    <Folder Include="LinkFinder.VueApp\src\components\Link\" />
+    <Folder Include="LinkFinder.VueApp\src\components\LinksBlock\" />
+    <Folder Include="LinkFinder.VueApp\src\components\HidingWindow\" />
+    <Folder Include="LinkFinder.VueApp\src\components\UrlInputForm\" />
+    <Folder Include="LinkFinder.VueApp\src\components\TestsList\" />
+    <Folder Include="LinkFinder.VueApp\src\pages\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="LinkFinder.VueApp\.babelrc" />
+    <Content Include="LinkFinder.VueApp\.editorconfig" />
+    <Content Include="LinkFinder.VueApp\.gitignore" />
+    <Content Include="LinkFinder.VueApp\index.html" />
+    <Content Include="LinkFinder.VueApp\package.json" />
+    <Content Include="LinkFinder.VueApp\README.md" />
+    <Content Include="LinkFinder.VueApp\src\App.vue" />
+    <Content Include="LinkFinder.VueApp\src\components\HidingWindow\hidingWindow.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="LinkFinder.VueApp\src\components\Link\link.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="LinkFinder.VueApp\src\components\LinksBlock\linksBlock.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="LinkFinder.VueApp\src\components\TestsList\testsList.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="LinkFinder.VueApp\src\components\UrlInputForm\urlInputForm.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="LinkFinder.VueApp\src\pages\ResultPage.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="LinkFinder.VueApp\src\pages\TestsPage.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="LinkFinder.VueApp\src\main.js" />
+    <Content Include="LinkFinder.VueApp\src\routes.js">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="LinkFinder.VueApp\webpack.config.js" />
+  </ItemGroup>
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48022/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
