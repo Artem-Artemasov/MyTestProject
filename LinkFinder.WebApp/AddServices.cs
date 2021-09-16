@@ -2,7 +2,6 @@
 using LinkFinder.Logic.Crawlers;
 using LinkFinder.Logic.Services;
 using LinkFinder.Logic.Validators;
-using LinkFinder.WebApp.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -21,7 +20,7 @@ namespace LinkFinder.WebApp
             services.AddScoped<LinkValidator>();
             services.AddScoped<HtmlCrawler>();
             services.AddScoped<SitemapCrawler>();
-            services.AddScoped<WebCrawlerApp>();
+            services.AddScoped<CrawlerApp>();
         }
     }
 }

@@ -20,15 +20,15 @@ namespace LinkFinder.DbWorker
             _resultRepository = resultRepository;
         }
 
-        public async Task SaveAsync(string url, IEnumerable<Link> htmlLinks, IEnumerable<Link> sitemapLinks)
+        public virtual async Task<Test> SaveTestAsync(string url, IEnumerable<Link> htmlLinks, IEnumerable<Link> sitemapLinks)
         {
             var test = new Test() { Url = url };
             await _testsRepository.AddAsync(test);
             await _testsRepository.SaveChangesAsync();
 
             var allLinks = htmlLinks.Except(sitemapLinks, (x, y) => x.Url == y.Url)
-                                           .Concat(sitemapLinks)
-                                           .ToList();
+                                           .Concat(sitemapLinks);
+
             //Create list of result object
             var allResults = allLinks.Select(p => new Result()
             {
@@ -41,16 +41,18 @@ namespace LinkFinder.DbWorker
 
             _resultRepository.AddRange(allResults);
             await _resultRepository.SaveChangesAsync();
+
+            return test;
         }
 
-        public async Task<IQueryable<Test>> GetTestsAsync()
+        public virtual async Task<IQueryable<Test>> GetTestsAsync()
         {
             return _testsRepository.GetAll();
         }
 
-        public async Task<IQueryable<Result>> GetResultsAsync(int id)
+        public virtual async Task<IQueryable<Result>> GetResultsAsync(int testId)
         {
-            return _resultRepository.GetAll().Where(p => p.TestId == id);
+            return _resultRepository.GetAll().Where(p => p.TestId == testId);
         }
     }
 }

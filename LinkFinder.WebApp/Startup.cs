@@ -1,12 +1,6 @@
-using LinkFinder.DbWorker;
-using LinkFinder.Logic.Crawlers;
-using LinkFinder.Logic.Services;
-using LinkFinder.Logic.Validators;
-using LinkFinder.WebApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -43,8 +37,9 @@ namespace LinkFinder.WebApp
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseMvc(routes => {
-                routes.MapRoute("default", "{controller}/{id?}", defaults: new { controller = "Test", action = "Index" });
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute("default", "{controller}/{id?}", defaults: new { controller = "Tests", action = "Index" });
                 routes.MapRoute("posteddata", "{controller}/{action}/{id?}", defaults: new { controller = "Test", action = "Index" });
             });
         }

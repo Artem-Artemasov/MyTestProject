@@ -27,14 +27,10 @@ namespace LinkFinder.Logic.Crawlers
             var storage = new List<Link>();
 
             if (_linkValidator.IsCorrectLink(baseUrl, out string errorMessage) == false)
-            {
                 return storage;
-            }
 
-            if (baseUrl.EndsWith('/') == false)
-            {
+            if (baseUrl.EndsWith('/') == false) 
                 baseUrl += '/';
-            }
 
             var sitemapLink = new Link(GetSitemapUrl(baseUrl));
 
