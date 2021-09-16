@@ -1,7 +1,7 @@
 <template>
   <div class="tests-list">
 
-      <div v-for="test of getTests" class="row py-3 border">
+      <div v-for="test of getTests" :key="test" class="row py-3 border">
         <div class="col-6 url border-right">{{test.url}}</div>
         <div class="col-3 date border-right">{{test.timeCreated | moment("HH:mm:ss  L")}}</div>
 

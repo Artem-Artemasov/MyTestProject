@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using LinkFinder.DbWorker;
 using LinkFinder.DbWorker.Interfaces;
 using LinkFinder.Logic.Crawlers;
@@ -21,7 +22,7 @@ namespace LinkFinder.WebApi
 
             services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            var connectionString = Environment.GetEnvironmentVariable("DbConnectionString");
             services.AddEfRepository<LinkFinderDbContext>(options => options.UseSqlServer(connectionString));
 
             services.AddScoped<DatabaseWorker>();

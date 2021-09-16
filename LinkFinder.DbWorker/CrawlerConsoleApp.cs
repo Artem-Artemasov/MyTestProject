@@ -1,4 +1,4 @@
-﻿using LinkFinder.ConsoleOutput;
+﻿/*using LinkFinder.ConsoleOutput;
 using LinkFinder.Logic.Crawlers;
 using System;
 
@@ -36,3 +36,4 @@ namespace LinkFinder.DbWorker
         }
     }
 }
+*/

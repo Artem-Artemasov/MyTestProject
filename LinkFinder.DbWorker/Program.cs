@@ -1,4 +1,5 @@
-﻿using LinkFinder.Logic.Crawlers;
+﻿using System;
+using LinkFinder.Logic.Crawlers;
 using LinkFinder.Logic.Services;
 using LinkFinder.Logic.Validators;
 using Microsoft.EntityFrameworkCore;
@@ -14,17 +15,19 @@ namespace LinkFinder.DbWorker
     {
         static async Task Main(string[] args)
         {
+
             using IHost host = CreateHostBuilder(args).Build();
-            var linkConsoleApp = host.Services.GetService<CrawlerConsoleApp>();
-            linkConsoleApp.Start();
+/*            var linkConsoleApp = host.Services.GetService<CrawlerConsoleApp>();*/
+/*            linkConsoleApp.Start();*/
             await host.RunAsync();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args).ConfigureServices((hostContext, services) =>
             {
-                services.AddEfRepository<LinkFinderDbContext>(options => options.UseSqlServer(@"Server=DESKTOP-BFO0R26; Database=LinkFinder; Trusted_Connection=True"));
-                services.AddScoped<CrawlerConsoleApp>();
+                var connectionString = Environment.GetEnvironmentVariable("DbConnectionString");
+                services.AddEfRepository<LinkFinderDbContext>(options => options.UseSqlServer(connectionString));
+/*                services.AddScoped<CrawlerConsoleApp>();*/
                 services.AddScoped<DatabaseWorker>();
                 services.AddScoped<RequestService>();
                 services.AddScoped<LinkParser>();

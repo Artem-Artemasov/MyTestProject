@@ -32,7 +32,7 @@
 </template>
 
 <script>
-  import LinksBlock from '../components/LinksBlock/linksBlock.vue'
+  import LinksBlock from '../components/LinksBlock/LinksBlock.vue'
 
   export default {
     name: 'Result',

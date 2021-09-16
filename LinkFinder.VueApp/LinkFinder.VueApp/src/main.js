@@ -16,7 +16,7 @@ Vue.use(VueRouter);
 Vue.use(VueResource);
 Vue.use(require('vue-moment'));
 
-Vue.http.options.root = "http://dev.siteCrawler/api/";
+Vue.http.options.root = 'https://linkfinder.azurewebsites.net/api/';
 
 new Vue({
   el: '#app',

@@ -21,8 +21,8 @@
 </template>
 
 <script>
-  import TestsList from '../components/TestsList/testsList.vue'
-  import UrlInputForm from '../components/UrlInputForm/urlInputForm.vue'
+  import TestsList from '../components/TestsList/TestsList.vue'
+  import UrlInputForm from '../components/UrlInputForm/UrlInputForm.vue'
 
   export default {
     name: 'Tests',

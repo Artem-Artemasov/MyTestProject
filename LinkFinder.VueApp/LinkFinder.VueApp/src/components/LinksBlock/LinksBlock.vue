@@ -27,7 +27,7 @@
 </template>
 
 <script>
-  import Link from '../Link/link.vue';
+  import Link from '../Link/Link.vue';
 
   export default {
     name: 'linksBlock',
